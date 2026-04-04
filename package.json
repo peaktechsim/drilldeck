@@ -1,0 +1,12 @@
+{
+  "name": "drilldeck",
+  "private": true,
+  "scripts": {
+    "lint": "biome check .",
+    "lint:fix": "biome check --fix .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.0"
+  }
+}

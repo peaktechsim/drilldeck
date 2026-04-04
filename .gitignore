@@ -1,0 +1,7 @@
+node_modules/
+dist/
+public/
+drizzle/
+.env
+*.log
+coverage/
