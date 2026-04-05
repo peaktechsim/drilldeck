@@ -21,10 +21,12 @@ async function bootstrap() {
   if (process.env.NODE_ENV === "production") {
     const expressApp = app.getHttpAdapter().getInstance();
     const indexPath = join(__dirname, "..", "..", "public", "index.html");
-    expressApp.get("/{*path}", (req: { path: string }, res: { sendFile: (p: string) => void }) => {
-      if (!req.path.startsWith("/api")) {
-        res.sendFile(indexPath);
+    expressApp.get("/{*path}", (req: { path: string }, res: { sendFile: (p: string) => void }, next: () => void) => {
+      if (req.path.startsWith("/api")) {
+        next();
+        return;
       }
+      res.sendFile(indexPath);
     });
   }
 
