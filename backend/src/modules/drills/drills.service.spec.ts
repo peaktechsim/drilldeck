@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { NotFoundException } from "@nestjs/common";
-import { DrillsService } from "./drills.service";
 import { drills } from "../../schema";
+import { DrillsService } from "./drills.service";
 
 jest.mock("drizzle-orm", () => {
   const actual = jest.requireActual("drizzle-orm") as Record<string, unknown>;

@@ -1,6 +1,5 @@
-import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import UspsaTarget from "@/components/uspsa-target";
+import { type FormEvent, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import UspsaTarget from "@/components/uspsa-target";
 import { useAuth } from "@/context/auth-context";
 import { api } from "@/lib/api";
 
@@ -42,7 +42,9 @@ export default function DrillsPage() {
 
   function toggleZone(zone: string) {
     setSelectedZones((current) =>
-      current.includes(zone) ? current.filter((entry) => entry !== zone) : [...current, zone].sort(),
+      current.includes(zone)
+        ? current.filter((entry) => entry !== zone)
+        : [...current, zone].sort(),
     );
   }
 
@@ -89,7 +91,9 @@ export default function DrillsPage() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Drills</h1>
-          <p className="text-sm text-muted-foreground">Review available drills and their USPSA scoring zones.</p>
+          <p className="text-sm text-muted-foreground">
+            Review available drills and their USPSA scoring zones.
+          </p>
         </div>
 
         {shooter?.isAdmin ? (
@@ -110,7 +114,9 @@ export default function DrillsPage() {
             <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Create drill</DialogTitle>
-                <DialogDescription>Set the drill details and choose the USPSA target zones to emphasize.</DialogDescription>
+                <DialogDescription>
+                  Set the drill details and choose the USPSA target zones to emphasize.
+                </DialogDescription>
               </DialogHeader>
 
               <form className="space-y-5" onSubmit={handleSubmit}>
@@ -165,7 +171,9 @@ export default function DrillsPage() {
                         className="flex justify-center"
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">Tap the silhouette zones or use the checkboxes below.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Tap the silhouette zones or use the checkboxes below.
+                    </p>
                   </div>
 
                   <div className="space-y-3">
@@ -175,10 +183,10 @@ export default function DrillsPage() {
                         const checked = selectedZones.includes(zone);
 
                         return (
-                          <label key={zone} className="flex items-center gap-3 text-sm font-medium">
+                          <div key={zone} className="flex items-center gap-3 text-sm font-medium">
                             <Checkbox checked={checked} onCheckedChange={() => toggleZone(zone)} />
                             <span>Zone {zone}</span>
-                          </label>
+                          </div>
                         );
                       })}
                     </div>
@@ -189,7 +197,11 @@ export default function DrillsPage() {
                 {formError ? <p className="text-sm text-destructive">{formError}</p> : null}
 
                 <DialogFooter>
-                  <Button type="submit" className="h-12 text-base" disabled={createMutation.isPending}>
+                  <Button
+                    type="submit"
+                    className="h-12 text-base"
+                    disabled={createMutation.isPending}
+                  >
                     {createMutation.isPending ? "Creating…" : "Save drill"}
                   </Button>
                 </DialogFooter>
@@ -199,11 +211,15 @@ export default function DrillsPage() {
         ) : null}
       </div>
 
-      {drillsQuery.isLoading ? <p className="text-sm text-muted-foreground">Loading drills…</p> : null}
+      {drillsQuery.isLoading ? (
+        <p className="text-sm text-muted-foreground">Loading drills…</p>
+      ) : null}
 
       {drillsQuery.error ? (
         <p className="text-sm text-destructive">
-          {drillsQuery.error instanceof Error ? drillsQuery.error.message : "Unable to load drills."}
+          {drillsQuery.error instanceof Error
+            ? drillsQuery.error.message
+            : "Unable to load drills."}
         </p>
       ) : null}
 
@@ -217,7 +233,8 @@ export default function DrillsPage() {
             <CardContent className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">Time standard:</span> {drill.timeStandard}s
+                  <span className="font-medium text-foreground">Time standard:</span>{" "}
+                  {drill.timeStandard}s
                 </p>
                 <p className="text-sm text-muted-foreground">
                   <span className="font-medium text-foreground">Target zones:</span>{" "}

@@ -13,7 +13,9 @@ export const shooters = pgTable("shooters", {
 
 export const shooterLockouts = pgTable("shooter_lockouts", {
   id: serial("id").primaryKey(),
-  targetShooterId: integer("target_shooter_id").references(() => shooters.id).notNull(),
+  targetShooterId: integer("target_shooter_id")
+    .references(() => shooters.id)
+    .notNull(),
   failedAttempts: integer("failed_attempts").notNull().default(0),
   lockedUntil: timestamp("locked_until"),
 });

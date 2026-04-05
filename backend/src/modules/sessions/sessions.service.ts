@@ -1,9 +1,15 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { eq } from "drizzle-orm";
-import { DRIZZLE } from "../../config/drizzle.module";
 import type { Database } from "../../config/database";
-import { drills, sessionDrills, sessionEntries, sessionShooters, trainingSessions } from "../../schema";
-import { ShootersService } from "../shooters/shooters.service";
+import { DRIZZLE } from "../../config/drizzle.module";
+import {
+  drills,
+  sessionDrills,
+  sessionEntries,
+  sessionShooters,
+  trainingSessions,
+} from "../../schema";
+import type { ShootersService } from "../shooters/shooters.service";
 import type { AddShooterDto, CreateSessionDto, RecordEntryDto, SetDrillsDto } from "./dto";
 
 type SessionRow = typeof trainingSessions.$inferSelect;
@@ -132,7 +138,11 @@ export class SessionsService {
   }
 
   private async findSessionById(id: number): Promise<SessionRow> {
-    const [session] = await this.db.select().from(trainingSessions).where(eq(trainingSessions.id, id)).limit(1);
+    const [session] = await this.db
+      .select()
+      .from(trainingSessions)
+      .where(eq(trainingSessions.id, id))
+      .limit(1);
 
     if (!session) {
       throw new NotFoundException("Session not found");

@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { eq } from "drizzle-orm";
-import { DRIZZLE } from "../../config/drizzle.module";
 import type { Database } from "../../config/database";
+import { DRIZZLE } from "../../config/drizzle.module";
 import { drills } from "../../schema";
 import type { CreateDrillDto, UpdateDrillDto } from "./dto";
 
@@ -50,7 +50,11 @@ export class DrillsService {
     if (dto.timeStandard !== undefined) updates.timeStandard = dto.timeStandard;
     if (dto.targetZones !== undefined) updates.targetZones = dto.targetZones;
 
-    const [updated] = await this.db.update(drills).set(updates).where(eq(drills.id, id)).returning();
+    const [updated] = await this.db
+      .update(drills)
+      .set(updates)
+      .where(eq(drills.id, id))
+      .returning();
     return updated;
   }
 }

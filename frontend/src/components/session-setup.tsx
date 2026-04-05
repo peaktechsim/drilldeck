@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search, UserPlus, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -123,7 +123,9 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
 
   function toggleDrill(drillId: number) {
     setSelectedDrillIds((current) =>
-      current.includes(drillId) ? current.filter((entry) => entry !== drillId) : [...current, drillId],
+      current.includes(drillId)
+        ? current.filter((entry) => entry !== drillId)
+        : [...current, drillId],
     );
   }
 
@@ -179,7 +181,9 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
       <Card>
         <CardHeader>
           <CardTitle>Session setup</CardTitle>
-          <CardDescription>Search registered shooters, verify their PINs, and build your firing line.</CardDescription>
+          <CardDescription>
+            Search registered shooters, verify their PINs, and build your firing line.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
@@ -197,10 +201,14 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
           </div>
 
           <div className="space-y-3 rounded-xl border bg-muted/10 p-3">
-            {shootersQuery.isLoading ? <p className="text-sm text-muted-foreground">Loading shooters…</p> : null}
+            {shootersQuery.isLoading ? (
+              <p className="text-sm text-muted-foreground">Loading shooters…</p>
+            ) : null}
             {shootersQuery.error ? (
               <p className="text-sm text-destructive">
-                {shootersQuery.error instanceof Error ? shootersQuery.error.message : "Unable to load shooters."}
+                {shootersQuery.error instanceof Error
+                  ? shootersQuery.error.message
+                  : "Unable to load shooters."}
               </p>
             ) : null}
 
@@ -225,7 +233,9 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
                 </button>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">No unverified shooters match that search.</p>
+              <p className="text-sm text-muted-foreground">
+                No unverified shooters match that search.
+              </p>
             )}
           </div>
 
@@ -233,7 +243,9 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
             <div className="space-y-3 rounded-xl border border-primary/20 bg-primary/5 p-4 animate-in fade-in slide-in-from-right-4 duration-300">
               <div>
                 <p className="font-medium">Verify {selectedShooter.name}</p>
-                <p className="text-sm text-muted-foreground">Enter PIN to add this shooter to the session.</p>
+                <p className="text-sm text-muted-foreground">
+                  Enter PIN to add this shooter to the session.
+                </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                 <div className="flex-1 space-y-2">
@@ -248,7 +260,11 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
                     placeholder="••••"
                   />
                 </div>
-                <Button type="button" className="h-12 px-6 text-base" onClick={() => void handleVerifyShooter()}>
+                <Button
+                  type="button"
+                  className="h-12 px-6 text-base"
+                  onClick={() => void handleVerifyShooter()}
+                >
                   Add shooter
                 </Button>
               </div>
@@ -270,12 +286,22 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
           <CardContent className="space-y-3">
             {verifiedShooters.length ? (
               verifiedShooters.map((entry, index) => (
-                <div key={entry.id} className="flex items-center justify-between rounded-xl border bg-background px-4 py-3">
+                <div
+                  key={entry.id}
+                  className="flex items-center justify-between rounded-xl border bg-background px-4 py-3"
+                >
                   <div>
-                    <p className="font-medium">{index + 1}. {entry.name}</p>
+                    <p className="font-medium">
+                      {index + 1}. {entry.name}
+                    </p>
                     <p className="text-sm text-muted-foreground">{entry.email}</p>
                   </div>
-                  <Button type="button" variant="ghost" size="icon-sm" onClick={() => removeShooter(entry.id)}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => removeShooter(entry.id)}
+                  >
                     <X className="size-4" />
                   </Button>
                 </div>
@@ -289,7 +315,9 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
         <Card>
           <CardHeader>
             <CardTitle>Drills</CardTitle>
-            <CardDescription>Select one or more drills and choose how they should run.</CardDescription>
+            <CardDescription>
+              Select one or more drills and choose how they should run.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="space-y-3">
@@ -297,14 +325,23 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
                 const checked = selectedDrillIds.includes(drill.id);
 
                 return (
-                  <label key={drill.id} className="flex items-start gap-3 rounded-xl border bg-background px-4 py-3">
-                    <Checkbox checked={checked} onCheckedChange={() => toggleDrill(drill.id)} className="mt-1" />
+                  <div
+                    key={drill.id}
+                    className="flex items-start gap-3 rounded-xl border bg-background px-4 py-3"
+                  >
+                    <Checkbox
+                      checked={checked}
+                      onCheckedChange={() => toggleDrill(drill.id)}
+                      className="mt-1"
+                    />
                     <div className="space-y-1">
                       <p className="font-medium">{drill.name}</p>
                       <p className="text-sm text-muted-foreground">{drill.description}</p>
-                      <p className="text-xs text-muted-foreground">Time standard: {drill.timeStandard}s</p>
+                      <p className="text-xs text-muted-foreground">
+                        Time standard: {drill.timeStandard}s
+                      </p>
                     </div>
-                  </label>
+                  </div>
                 );
               })}
             </div>
@@ -312,10 +349,20 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
             <div className="space-y-3">
               <Label>Drill order</Label>
               <div className="grid gap-3 sm:grid-cols-2">
-                {([
-                  { value: "manual", title: "Manual", description: "Run drills in the list order shown above." },
-                  { value: "random", title: "Random", description: "Shuffle the selected drills once when the session begins." },
-                ] as const).map((option) => (
+                {(
+                  [
+                    {
+                      value: "manual",
+                      title: "Manual",
+                      description: "Run drills in the list order shown above.",
+                    },
+                    {
+                      value: "random",
+                      title: "Random",
+                      description: "Shuffle the selected drills once when the session begins.",
+                    },
+                  ] as const
+                ).map((option) => (
                   <button
                     key={option.value}
                     type="button"
@@ -336,7 +383,12 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
 
             {submitError ? <p className="text-sm text-destructive">{submitError}</p> : null}
 
-            <Button type="button" className="h-12 w-full text-base" onClick={() => void handleBegin()} disabled={isSubmitting}>
+            <Button
+              type="button"
+              className="h-12 w-full text-base"
+              onClick={() => void handleBegin()}
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Starting session…" : "Begin training"}
             </Button>
           </CardContent>

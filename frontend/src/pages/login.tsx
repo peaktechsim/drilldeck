@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -92,7 +92,10 @@ export default function LoginPage() {
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Need an account?{" "}
-            <Link className="font-medium text-foreground underline underline-offset-4" to="/register">
+            <Link
+              className="font-medium text-foreground underline underline-offset-4"
+              to="/register"
+            >
               Register here
             </Link>
           </p>

@@ -1,8 +1,8 @@
-import { describe, beforeEach, expect, it, jest } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { ForbiddenException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import bcrypt from "bcrypt";
-import { ShootersService } from "./shooters.service";
 import { shooterLockouts, shooters } from "../../schema";
+import { ShootersService } from "./shooters.service";
 
 jest.mock("drizzle-orm", () => {
   const actual = jest.requireActual("drizzle-orm") as Record<string, unknown>;
@@ -169,7 +169,8 @@ class FakeUpdateBuilder {
 
 function matchesCondition(row: Record<string, unknown>, condition: any): boolean {
   if (!condition) return true;
-  if (condition.op === "and") return condition.conditions.every((entry: any) => matchesCondition(row, entry));
+  if (condition.op === "and")
+    return condition.conditions.every((entry: any) => matchesCondition(row, entry));
 
   const key = columnToPropertyName(condition.column);
   const current = row[key];
@@ -215,7 +216,12 @@ describe("ShootersService", () => {
       pin: "4321",
     });
 
-    db.lockouts.push({ id: 1, targetShooterId: registered.id, failedAttempts: 3, lockedUntil: null });
+    db.lockouts.push({
+      id: 1,
+      targetShooterId: registered.id,
+      failedAttempts: 3,
+      lockedUntil: null,
+    });
 
     const shooter = await service.verifyPin({ email: "sam@example.com", pin: "4321" });
 
@@ -232,9 +238,9 @@ describe("ShootersService", () => {
       pin: "9999",
     });
 
-    await expect(service.verifyPin({ email: "pat@example.com", pin: "0000" })).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(
+      service.verifyPin({ email: "pat@example.com", pin: "0000" }),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
     expect(db.lockouts).toHaveLength(1);
     expect(db.lockouts[0].failedAttempts).toBe(1);
     expect(db.lockouts[0].lockedUntil).toBeNull();
@@ -248,18 +254,18 @@ describe("ShootersService", () => {
     });
 
     for (let attempt = 0; attempt < 5; attempt += 1) {
-      await expect(service.verifyPin({ email: "lock@example.com", pin: "1111" })).rejects.toBeInstanceOf(
-        UnauthorizedException,
-      );
+      await expect(
+        service.verifyPin({ email: "lock@example.com", pin: "1111" }),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
     }
 
     expect(db.lockouts).toHaveLength(1);
     expect(db.lockouts[0].failedAttempts).toBe(5);
     expect(db.lockouts[0].lockedUntil).toBeInstanceOf(Date);
 
-    await expect(service.verifyPin({ email: "lock@example.com", pin: "2468" })).rejects.toBeInstanceOf(
-      UnauthorizedException,
-    );
+    await expect(
+      service.verifyPin({ email: "lock@example.com", pin: "2468" }),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
   it("blocks non-admins from reading or updating other shooters", async () => {

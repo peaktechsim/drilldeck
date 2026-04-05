@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
 import { LoaderCircle } from "lucide-react";
-import UspsaTarget from "@/components/uspsa-target";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import UspsaTarget from "@/components/uspsa-target";
 import { api, type SessionEntry } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { SessionConfig } from "./session-setup";
@@ -159,14 +159,23 @@ export default function DrillFlow({ config, onComplete }: DrillFlowProps) {
     <div className="flex flex-1 flex-col justify-center">
       {phase === "shooter-splash" ? (
         <div className="flex min-h-[65vh] flex-col items-center justify-center rounded-3xl border bg-card px-6 text-center shadow-sm animate-in fade-in slide-in-from-right-4 duration-300">
-          <p className="text-sm font-medium uppercase tracking-[0.3em] text-muted-foreground">Up Next</p>
-          <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-6xl">{activeShooter.name}</h1>
+          <p className="text-sm font-medium uppercase tracking-[0.3em] text-muted-foreground">
+            Up Next
+          </p>
+          <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-6xl">
+            {activeShooter.name}
+          </h1>
           <p className="mt-4 text-lg text-muted-foreground">
             Drill {drillIndex + 1} of {drills.length}: {activeDrill.name}
           </p>
         </div>
       ) : (
-        <Card className={cn("animate-in fade-in slide-in-from-right-4 duration-300", phase === "transitioning" && "opacity-70")}>
+        <Card
+          className={cn(
+            "animate-in fade-in slide-in-from-right-4 duration-300",
+            phase === "transitioning" && "opacity-70",
+          )}
+        >
           <CardHeader>
             <CardTitle className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <span>{activeDrill.name}</span>
@@ -175,22 +184,31 @@ export default function DrillFlow({ config, onComplete }: DrillFlowProps) {
               </span>
             </CardTitle>
             <CardDescription>
-              {activeDrill.description} • Standard {activeDrill.timeStandard}s • Entry {roundNumber}/{totalRounds}
+              {activeDrill.description} • Standard {activeDrill.timeStandard}s • Entry {roundNumber}
+              /{totalRounds}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
             <div className="space-y-4 rounded-2xl border bg-muted/10 p-5">
               <div>
-                <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">Shooter</p>
+                <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+                  Shooter
+                </p>
                 <p className="text-3xl font-semibold tracking-tight">{activeShooter.name}</p>
               </div>
 
               <div className="rounded-2xl border bg-background p-4">
-                <UspsaTarget selectedZones={activeDrill.targetZones} className="flex justify-center" />
+                <UspsaTarget
+                  selectedZones={activeDrill.targetZones}
+                  className="flex justify-center"
+                />
               </div>
             </div>
 
-            <form className="space-y-4 rounded-2xl border bg-background p-5" onSubmit={handleSubmit}>
+            <form
+              className="space-y-4 rounded-2xl border bg-background p-5"
+              onSubmit={handleSubmit}
+            >
               <div className="space-y-2">
                 <Label htmlFor="time-entered">Time entered (seconds)</Label>
                 <Input

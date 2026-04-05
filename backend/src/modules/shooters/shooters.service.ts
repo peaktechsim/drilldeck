@@ -1,8 +1,14 @@
-import { Inject, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { and, eq, gt } from "drizzle-orm";
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import bcrypt from "bcrypt";
-import { DRIZZLE } from "../../config/drizzle.module";
+import { and, eq, gt } from "drizzle-orm";
 import type { Database } from "../../config/database";
+import { DRIZZLE } from "../../config/drizzle.module";
 import { shooterLockouts, shooters } from "../../schema";
 import type { RegisterShooterDto, UpdateShooterDto, VerifyPinDto } from "./dto";
 
@@ -34,7 +40,9 @@ export class ShootersService {
   }
 
   async listAll(): Promise<ShooterSummary[]> {
-    return this.db.select({ id: shooters.id, name: shooters.name, email: shooters.email }).from(shooters);
+    return this.db
+      .select({ id: shooters.id, name: shooters.name, email: shooters.email })
+      .from(shooters);
   }
 
   async getById(id: number, requesterId?: number, isAdmin = false): Promise<SafeShooter> {
@@ -44,7 +52,12 @@ export class ShootersService {
     return this.stripPin(shooter);
   }
 
-  async update(id: number, dto: UpdateShooterDto, requesterId?: number, isAdmin = false): Promise<SafeShooter> {
+  async update(
+    id: number,
+    dto: UpdateShooterDto,
+    requesterId?: number,
+    isAdmin = false,
+  ): Promise<SafeShooter> {
     this.assertSelfOrAdmin(id, requesterId, isAdmin);
 
     await this.findShooterById(id);
@@ -65,7 +78,11 @@ export class ShootersService {
   }
 
   async verifyPin(dto: VerifyPinDto): Promise<SafeShooter> {
-    const [shooter] = await this.db.select().from(shooters).where(eq(shooters.email, dto.email)).limit(1);
+    const [shooter] = await this.db
+      .select()
+      .from(shooters)
+      .where(eq(shooters.email, dto.email))
+      .limit(1);
 
     if (!shooter) {
       throw new UnauthorizedException("Invalid email or PIN");
@@ -109,7 +126,11 @@ export class ShootersService {
     return lockout;
   }
 
-  private async recordFailedAttempt(shooterId: number, lockout: LockoutRow | undefined, now: Date): Promise<void> {
+  private async recordFailedAttempt(
+    shooterId: number,
+    lockout: LockoutRow | undefined,
+    now: Date,
+  ): Promise<void> {
     const failedAttempts = (lockout?.failedAttempts ?? 0) + 1;
     const lockedUntil = failedAttempts >= 5 ? new Date(now.getTime() + 60 * 60 * 1000) : null;
 
@@ -140,7 +161,9 @@ export class ShootersService {
     const [activeLockout] = await this.db
       .select()
       .from(shooterLockouts)
-      .where(and(eq(shooterLockouts.targetShooterId, shooterId), gt(shooterLockouts.failedAttempts, 0)))
+      .where(
+        and(eq(shooterLockouts.targetShooterId, shooterId), gt(shooterLockouts.failedAttempts, 0)),
+      )
       .limit(1);
 
     if (activeLockout) {

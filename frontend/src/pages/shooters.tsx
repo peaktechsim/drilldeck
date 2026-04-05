@@ -1,5 +1,5 @@
-import { useEffect, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type FormEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -70,7 +70,9 @@ export default function ShootersPage() {
       <Card>
         <CardHeader>
           <CardTitle>{shooter.isAdmin ? "Shooter profile" : "Your shooter profile"}</CardTitle>
-          <CardDescription>Update the name and firearm details used during training sessions.</CardDescription>
+          <CardDescription>
+            Update the name and firearm details used during training sessions.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -112,13 +114,19 @@ export default function ShootersPage() {
 
             {shooterQuery.error ? (
               <p className="text-sm text-destructive">
-                {shooterQuery.error instanceof Error ? shooterQuery.error.message : "Unable to load your profile."}
+                {shooterQuery.error instanceof Error
+                  ? shooterQuery.error.message
+                  : "Unable to load your profile."}
               </p>
             ) : null}
 
             {formError ? <p className="text-sm text-destructive">{formError}</p> : null}
 
-            <Button type="submit" className="h-12 text-base" disabled={updateMutation.isPending || shooterQuery.isLoading}>
+            <Button
+              type="submit"
+              className="h-12 text-base"
+              disabled={updateMutation.isPending || shooterQuery.isLoading}
+            >
               {updateMutation.isPending ? "Saving…" : "Save profile"}
             </Button>
           </form>
@@ -132,11 +140,15 @@ export default function ShootersPage() {
             <CardDescription>Admin view of registered shooters in the system.</CardDescription>
           </CardHeader>
           <CardContent>
-            {shootersQuery.isLoading ? <p className="text-sm text-muted-foreground">Loading shooters…</p> : null}
+            {shootersQuery.isLoading ? (
+              <p className="text-sm text-muted-foreground">Loading shooters…</p>
+            ) : null}
 
             {shootersQuery.error ? (
               <p className="text-sm text-destructive">
-                {shootersQuery.error instanceof Error ? shootersQuery.error.message : "Unable to load shooters."}
+                {shootersQuery.error instanceof Error
+                  ? shootersQuery.error.message
+                  : "Unable to load shooters."}
               </p>
             ) : null}
 

@@ -1,6 +1,3 @@
-import type { DrillAnalysis } from "@/lib/api";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { findAnnotations, getDrillColor } from "@/components/analysis/utils";
 import {
   CartesianGrid,
   Legend,
@@ -13,6 +10,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { findAnnotations, getDrillColor } from "@/components/analysis/utils";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { DrillAnalysis } from "@/lib/api";
 
 type TimeTrendRow = {
   attempt: number;
@@ -38,7 +38,9 @@ export function TimeTrendChart({ drills }: { drills: DrillAnalysis[] }) {
     <Card>
       <CardHeader>
         <CardTitle>Time trend</CardTitle>
-        <CardDescription>Attempt-by-attempt times with standards and milestone annotations.</CardDescription>
+        <CardDescription>
+          Attempt-by-attempt times with standards and milestone annotations.
+        </CardDescription>
       </CardHeader>
       <CardContent className="h-[360px] px-2 sm:px-6">
         <ResponsiveContainer width="100%" height="100%">
@@ -46,7 +48,11 @@ export function TimeTrendChart({ drills }: { drills: DrillAnalysis[] }) {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
             <XAxis dataKey="attempt" allowDecimals={false} />
             <YAxis unit="s" />
-            <Tooltip formatter={(value) => (typeof value === "number" ? `${value.toFixed(2)}s` : value ?? "—")} />
+            <Tooltip
+              formatter={(value) =>
+                typeof value === "number" ? `${value.toFixed(2)}s` : (value ?? "—")
+              }
+            />
             <Legend />
 
             {drills.map((drill, index) => {
@@ -58,7 +64,12 @@ export function TimeTrendChart({ drills }: { drills: DrillAnalysis[] }) {
                   stroke={color}
                   strokeDasharray="6 6"
                   ifOverflow="extendDomain"
-                  label={{ value: `${drill.drillName} standard`, fill: color, fontSize: 12, position: "insideTopRight" }}
+                  label={{
+                    value: `${drill.drillName} standard`,
+                    fill: color,
+                    fontSize: 12,
+                    position: "insideTopRight",
+                  }}
                 />
               );
             })}
@@ -85,7 +96,12 @@ export function TimeTrendChart({ drills }: { drills: DrillAnalysis[] }) {
                 r={6}
                 fill={annotation.color}
                 stroke="white"
-                label={{ value: annotation.label, fill: annotation.color, fontSize: 12, position: "top" }}
+                label={{
+                  value: annotation.label,
+                  fill: annotation.color,
+                  fontSize: 12,
+                  position: "top",
+                }}
               />
             ))}
           </LineChart>

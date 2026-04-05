@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import type { AddShooterDto, CreateSessionDto, RecordEntryDto, SetDrillsDto } from "./dto";
-import { SessionsService } from "./sessions.service";
+import type { SessionsService } from "./sessions.service";
 
 @Controller("sessions")
 export class SessionsController {
@@ -30,7 +30,10 @@ export class SessionsController {
   }
 
   @Post(":id/entries")
-  recordEntry(@Param("id", ParseIntPipe) id: number, @Body() dto: Omit<RecordEntryDto, "sessionId">) {
+  recordEntry(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() dto: Omit<RecordEntryDto, "sessionId">,
+  ) {
     return this.sessionsService.recordEntry({
       ...dto,
       sessionId: id,

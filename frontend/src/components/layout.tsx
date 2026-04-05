@@ -1,5 +1,5 @@
 import { BarChart3, Crosshair, LogOut, Target, Timer } from "lucide-react";
-import { NavLink, Navigate, Outlet, useLocation, useNavigate } from "react-router";
+import { Navigate, NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
@@ -33,7 +33,12 @@ export default function Layout() {
             <p className="text-2xl font-semibold tracking-tight">DrillDeck</p>
             <p className="text-sm text-muted-foreground">{shooter.name}</p>
           </div>
-          <Button type="button" variant="outline" className="h-12 px-4 text-base" onClick={handleLogout}>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-12 px-4 text-base"
+            onClick={handleLogout}
+          >
             <LogOut className="size-5" />
             Logout
           </Button>

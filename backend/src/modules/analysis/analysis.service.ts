@@ -1,7 +1,7 @@
 import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
 import { and, asc, eq, inArray } from "drizzle-orm";
-import { DRIZZLE } from "../../config/drizzle.module";
 import type { Database } from "../../config/database";
+import { DRIZZLE } from "../../config/drizzle.module";
 import { drills, sessionEntries, trainingSessions } from "../../schema";
 
 type AnalysisEntry = {
@@ -106,7 +106,12 @@ export class AnalysisService {
     };
   }
 
-  async getShooterAnalysis(shooterId: number, drillIds: number[], requesterId?: number, isAdmin = false) {
+  async getShooterAnalysis(
+    shooterId: number,
+    drillIds: number[],
+    requesterId?: number,
+    isAdmin = false,
+  ) {
     this.assertSelfOrAdmin(shooterId, requesterId, isAdmin);
 
     if (drillIds.length === 0) {
@@ -138,7 +143,9 @@ export class AnalysisService {
       })
       .from(sessionEntries)
       .innerJoin(trainingSessions, eq(trainingSessions.id, sessionEntries.sessionId))
-      .where(and(eq(sessionEntries.shooterId, shooterId), inArray(sessionEntries.drillId, drillIds)))
+      .where(
+        and(eq(sessionEntries.shooterId, shooterId), inArray(sessionEntries.drillId, drillIds)),
+      )
       .orderBy(asc(trainingSessions.startedAt), asc(sessionEntries.createdAt));
 
     const entriesByDrill = new Map<number, typeof entryRows>();

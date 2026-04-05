@@ -1,11 +1,11 @@
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 import { SHOOTER_STORAGE_KEY, type Shooter } from "@/lib/api";
 
@@ -52,10 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setShooter(null);
   }, []);
 
-  const value = useMemo(
-    () => ({ shooter, login, logout }),
-    [login, logout, shooter],
-  );
+  const value = useMemo(() => ({ shooter, login, logout }), [login, logout, shooter]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -84,7 +84,14 @@ export default function UspsaTarget({
       >
         <title>USPSA silhouette target</title>
 
-        <rect x="72" y="16" width="56" height="46" rx="8" className="fill-muted stroke-slate-700 stroke-[3]" />
+        <rect
+          x="72"
+          y="16"
+          width="56"
+          height="46"
+          rx="8"
+          className="fill-muted stroke-slate-700 stroke-[3]"
+        />
         <path
           d="M56 80 L144 80 L166 98 L172 124 L170 154 L162 188 L156 214 L149 300 L51 300 L44 214 L38 188 L30 154 L28 124 L34 98 Z"
           className="fill-muted stroke-slate-700 stroke-[3]"
@@ -118,16 +125,31 @@ export default function UspsaTarget({
           {...getAccessibilityProps("D")}
         />
 
-        <text x="100" y="44" textAnchor="middle" className="fill-slate-900 text-[18px] font-semibold">
+        <text
+          x="100"
+          y="44"
+          textAnchor="middle"
+          className="fill-slate-900 text-[18px] font-semibold"
+        >
           B
         </text>
         <text x="100" y="135" textAnchor="middle" className="fill-slate-900 text-[20px] font-bold">
           A
         </text>
-        <text x="100" y="176" textAnchor="middle" className="fill-slate-900 text-[18px] font-semibold">
+        <text
+          x="100"
+          y="176"
+          textAnchor="middle"
+          className="fill-slate-900 text-[18px] font-semibold"
+        >
           C
         </text>
-        <text x="100" y="250" textAnchor="middle" className="fill-slate-900 text-[18px] font-semibold">
+        <text
+          x="100"
+          y="250"
+          textAnchor="middle"
+          className="fill-slate-900 text-[18px] font-semibold"
+        >
           D
         </text>
       </svg>

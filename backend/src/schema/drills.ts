@@ -1,5 +1,5 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { shooters } from "./shooters";
 
 export const drills = pgTable("drills", {

@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { DrillComparisonChart } from "@/components/analysis/drill-comparison-chart";
+import { useEffect, useMemo, useState } from "react";
 import { DistributionChart } from "@/components/analysis/distribution-chart";
+import { DrillComparisonChart } from "@/components/analysis/drill-comparison-chart";
 import { PassRateChart } from "@/components/analysis/pass-rate-chart";
 import { SessionHistory } from "@/components/analysis/session-history";
 import { StatCards } from "@/components/analysis/stat-cards";
 import { TimeTrendChart } from "@/components/analysis/time-trend-chart";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/auth-context";
 import { api } from "@/lib/api";
@@ -41,7 +41,9 @@ export default function AnalysisPage() {
       return;
     }
 
-    setSelectedDrillIds((current) => (current.length > 0 ? current : drillsQuery.data.map((drill) => drill.id)));
+    setSelectedDrillIds((current) =>
+      current.length > 0 ? current : drillsQuery.data.map((drill) => drill.id),
+    );
   }, [drillsQuery.data]);
 
   const analysisQuery = useQuery({
@@ -58,7 +60,9 @@ export default function AnalysisPage() {
 
   function toggleDrill(drillId: number) {
     setSelectedDrillIds((current) =>
-      current.includes(drillId) ? current.filter((entry) => entry !== drillId) : [...current, drillId].sort((a, b) => a - b),
+      current.includes(drillId)
+        ? current.filter((entry) => entry !== drillId)
+        : [...current, drillId].sort((a, b) => a - b),
     );
   }
 
@@ -66,7 +70,9 @@ export default function AnalysisPage() {
     <div className="space-y-6 pb-4">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight">Analysis</h1>
-        <p className="text-sm text-muted-foreground">Track trends, compare drills, and inspect detailed session history.</p>
+        <p className="text-sm text-muted-foreground">
+          Track trends, compare drills, and inspect detailed session history.
+        </p>
       </div>
 
       <Card>
@@ -103,13 +109,16 @@ export default function AnalysisPage() {
               {drillsQuery.data?.map((drill) => {
                 const checked = selectedDrillIds.includes(drill.id);
                 return (
-                  <label key={drill.id} className="flex items-start gap-3 rounded-lg border p-3 text-sm">
+                  <div
+                    key={drill.id}
+                    className="flex items-start gap-3 rounded-lg border p-3 text-sm"
+                  >
                     <Checkbox checked={checked} onCheckedChange={() => toggleDrill(drill.id)} />
                     <span>
                       <span className="block font-medium">{drill.name}</span>
                       <span className="text-muted-foreground">Standard {drill.timeStandard}s</span>
                     </span>
-                  </label>
+                  </div>
                 );
               })}
             </div>
@@ -117,35 +126,50 @@ export default function AnalysisPage() {
 
           {drillsQuery.error ? (
             <p className="text-sm text-destructive">
-              {drillsQuery.error instanceof Error ? drillsQuery.error.message : "Unable to load drills."}
+              {drillsQuery.error instanceof Error
+                ? drillsQuery.error.message
+                : "Unable to load drills."}
             </p>
           ) : null}
 
           {shootersQuery.error ? (
             <p className="text-sm text-destructive">
-              {shootersQuery.error instanceof Error ? shootersQuery.error.message : "Unable to load shooters."}
+              {shootersQuery.error instanceof Error
+                ? shootersQuery.error.message
+                : "Unable to load shooters."}
             </p>
           ) : null}
         </CardContent>
       </Card>
 
-      {analysisQuery.isLoading ? <p className="text-sm text-muted-foreground">Loading analysis…</p> : null}
+      {analysisQuery.isLoading ? (
+        <p className="text-sm text-muted-foreground">Loading analysis…</p>
+      ) : null}
 
       {analysisQuery.error ? (
         <p className="text-sm text-destructive">
-          {analysisQuery.error instanceof Error ? analysisQuery.error.message : "Unable to load analysis."}
+          {analysisQuery.error instanceof Error
+            ? analysisQuery.error.message
+            : "Unable to load analysis."}
         </p>
       ) : null}
 
       {!analysisQuery.isLoading && !analysisQuery.error && selectedDrillIds.length === 0 ? (
         <Card>
-          <CardContent className="py-8 text-sm text-muted-foreground">Select at least one drill to view analysis.</CardContent>
+          <CardContent className="py-8 text-sm text-muted-foreground">
+            Select at least one drill to view analysis.
+          </CardContent>
         </Card>
       ) : null}
 
-      {!analysisQuery.isLoading && !analysisQuery.error && selectedDrills.length === 0 && selectedDrillIds.length > 0 ? (
+      {!analysisQuery.isLoading &&
+      !analysisQuery.error &&
+      selectedDrills.length === 0 &&
+      selectedDrillIds.length > 0 ? (
         <Card>
-          <CardContent className="py-8 text-sm text-muted-foreground">No recorded attempts yet for the current filter.</CardContent>
+          <CardContent className="py-8 text-sm text-muted-foreground">
+            No recorded attempts yet for the current filter.
+          </CardContent>
         </Card>
       ) : null}
 

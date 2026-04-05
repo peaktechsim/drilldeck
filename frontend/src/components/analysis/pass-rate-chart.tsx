@@ -1,8 +1,17 @@
 import { useMemo } from "react";
-import type { DrillAnalysis } from "@/lib/api";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { getDrillColor } from "@/components/analysis/utils";
-import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { DrillAnalysis } from "@/lib/api";
 
 type PassRateChartProps = {
   drills: DrillAnalysis[];
@@ -25,7 +34,11 @@ export function PassRateChart({ drills, windowSize = 10 }: PassRateChartProps) {
         const start = Math.max(0, index + 1 - windowSize);
         const slice = drill.entries.slice(start, index + 1);
         row[`drill-${drill.drillId}`] =
-          slice.length === 0 ? null : Number(((slice.filter((entry) => entry.pass).length / slice.length) * 100).toFixed(1));
+          slice.length === 0
+            ? null
+            : Number(
+                ((slice.filter((entry) => entry.pass).length / slice.length) * 100).toFixed(1),
+              );
       });
 
       return row;
@@ -36,7 +49,9 @@ export function PassRateChart({ drills, windowSize = 10 }: PassRateChartProps) {
     <Card>
       <CardHeader>
         <CardTitle>Rolling pass rate</CardTitle>
-        <CardDescription>Pass rate over the last {windowSize} attempts for each selected drill.</CardDescription>
+        <CardDescription>
+          Pass rate over the last {windowSize} attempts for each selected drill.
+        </CardDescription>
       </CardHeader>
       <CardContent className="h-[320px] px-2 sm:px-6">
         <ResponsiveContainer width="100%" height="100%">
@@ -44,7 +59,11 @@ export function PassRateChart({ drills, windowSize = 10 }: PassRateChartProps) {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
             <XAxis dataKey="attempt" allowDecimals={false} />
             <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
-            <Tooltip formatter={(value) => (typeof value === "number" ? `${value.toFixed(1)}%` : value ?? "—")} />
+            <Tooltip
+              formatter={(value) =>
+                typeof value === "number" ? `${value.toFixed(1)}%` : (value ?? "—")
+              }
+            />
             <Legend />
             {drills.map((drill, index) => {
               const color = getDrillColor(index);

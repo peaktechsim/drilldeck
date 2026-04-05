@@ -116,8 +116,14 @@ export function buildSessionHistory(drills: DrillAnalysis[]): SessionHistoryItem
         });
         existing.passCount += entry.pass ? 1 : 0;
         existing.failCount += entry.pass ? 0 : 1;
-        existing.bestTime = existing.bestTime === null ? entry.timeEntered : Math.min(existing.bestTime, entry.timeEntered);
-        existing.worstTime = existing.worstTime === null ? entry.timeEntered : Math.max(existing.worstTime, entry.timeEntered);
+        existing.bestTime =
+          existing.bestTime === null
+            ? entry.timeEntered
+            : Math.min(existing.bestTime, entry.timeEntered);
+        existing.worstTime =
+          existing.worstTime === null
+            ? entry.timeEntered
+            : Math.max(existing.worstTime, entry.timeEntered);
         continue;
       }
 
@@ -153,7 +159,10 @@ export function buildSessionHistory(drills: DrillAnalysis[]): SessionHistoryItem
         (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime(),
       ),
     }))
-    .sort((left, right) => new Date(right.sessionStartedAt).getTime() - new Date(left.sessionStartedAt).getTime());
+    .sort(
+      (left, right) =>
+        new Date(right.sessionStartedAt).getTime() - new Date(left.sessionStartedAt).getTime(),
+    );
 }
 
 export function buildHistogram(values: number[], bucketCount = 15) {
@@ -178,7 +187,8 @@ export function buildHistogram(values: number[], bucketCount = 15) {
   });
 
   values.forEach((value) => {
-    const index = span === 0 ? 0 : Math.min(Math.floor((value - min) / bucketSize), bucketCount - 1);
+    const index =
+      span === 0 ? 0 : Math.min(Math.floor((value - min) / bucketSize), bucketCount - 1);
     const target = bins[index];
     if (target) {
       target.count += 1;

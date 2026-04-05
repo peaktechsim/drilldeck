@@ -180,7 +180,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   const isJson = response.headers.get("content-type")?.includes("application/json");
-  const payload = isJson ? (await response.json()) as unknown : await response.text();
+  const payload = isJson ? ((await response.json()) as unknown) : await response.text();
 
   if (!response.ok) {
     const message =

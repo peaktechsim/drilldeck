@@ -1,7 +1,14 @@
 import { Check, Printer, RotateCcw, Save, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { api } from "@/lib/api";
 import type { DrillFlowResult, Entry } from "./drill-flow";
 import type { SessionConfig } from "./session-setup";
@@ -35,7 +42,8 @@ export default function Scorecard({ config, result, onNewSession }: ScorecardPro
         <div>
           <CardTitle>Scorecard</CardTitle>
           <CardDescription>
-            Session #{result.sessionId} • {config.shooters.length} shooters • {config.drills.length} drills
+            Session #{result.sessionId} • {config.shooters.length} shooters • {config.drills.length}{" "}
+            drills
           </CardDescription>
         </div>
 
@@ -63,7 +71,9 @@ export default function Scorecard({ config, result, onNewSession }: ScorecardPro
                 <TableHead key={drill.id} className="min-w-40">
                   <div className="flex flex-col">
                     <span>{drill.name}</span>
-                    <span className="text-xs font-normal text-muted-foreground">Std. {drill.timeStandard}s</span>
+                    <span className="text-xs font-normal text-muted-foreground">
+                      Std. {drill.timeStandard}s
+                    </span>
                   </div>
                 </TableHead>
               ))}
@@ -81,7 +91,10 @@ export default function Scorecard({ config, result, onNewSession }: ScorecardPro
                       {attempts.length ? (
                         <div className="space-y-2">
                           {attempts.map((attempt, index) => (
-                            <div key={`${attempt.shooterId}-${attempt.drillId}-${index}`} className="rounded-lg border bg-muted/10 p-2">
+                            <div
+                              key={`${attempt.shooterId}-${attempt.drillId}-${index}`}
+                              className="rounded-lg border bg-muted/10 p-2"
+                            >
                               <div className="flex items-center gap-2 text-sm font-medium">
                                 {attempt.pass ? (
                                   <Check className="size-4 text-green-600" />
@@ -90,7 +103,9 @@ export default function Scorecard({ config, result, onNewSession }: ScorecardPro
                                 )}
                                 <span>{attempt.pass ? "Pass" : "Fail"}</span>
                               </div>
-                              <p className="mt-1 text-xs text-muted-foreground">{formatTime(attempt.timeEntered)}</p>
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                {formatTime(attempt.timeEntered)}
+                              </p>
                             </div>
                           ))}
                         </div>

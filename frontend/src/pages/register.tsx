@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -71,7 +71,9 @@ export default function RegisterPage() {
       <Card className="w-full max-w-lg shadow-sm">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-3xl">Create account</CardTitle>
-          <CardDescription>Register a shooter profile for the current training day.</CardDescription>
+          <CardDescription>
+            Register a shooter profile for the current training day.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-5" onSubmit={handleSubmit}>

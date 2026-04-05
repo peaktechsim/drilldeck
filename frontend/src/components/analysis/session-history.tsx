@@ -1,10 +1,17 @@
-import { Fragment, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import type { DrillAnalysis } from "@/lib/api";
+import { Fragment, useMemo, useState } from "react";
+import { buildSessionHistory, formatSeconds } from "@/components/analysis/utils";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { buildSessionHistory, formatSeconds } from "@/components/analysis/utils";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { DrillAnalysis } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export function SessionHistory({ drills }: { drills: DrillAnalysis[] }) {
@@ -13,7 +20,9 @@ export function SessionHistory({ drills }: { drills: DrillAnalysis[] }) {
 
   function toggleSession(sessionId: number) {
     setOpenSessions((current) =>
-      current.includes(sessionId) ? current.filter((entry) => entry !== sessionId) : [...current, sessionId],
+      current.includes(sessionId)
+        ? current.filter((entry) => entry !== sessionId)
+        : [...current, sessionId],
     );
   }
 
@@ -21,7 +30,9 @@ export function SessionHistory({ drills }: { drills: DrillAnalysis[] }) {
     <Card>
       <CardHeader>
         <CardTitle>Session history</CardTitle>
-        <CardDescription>Newest sessions first. Expand a row to inspect individual attempts.</CardDescription>
+        <CardDescription>
+          Newest sessions first. Expand a row to inspect individual attempts.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -41,13 +52,23 @@ export function SessionHistory({ drills }: { drills: DrillAnalysis[] }) {
 
               return (
                 <Fragment key={session.sessionId}>
-                  <TableRow aria-expanded={expanded} className="cursor-pointer" onClick={() => toggleSession(session.sessionId)}>
+                  <TableRow
+                    aria-expanded={expanded}
+                    className="cursor-pointer"
+                    onClick={() => toggleSession(session.sessionId)}
+                  >
                     <TableCell>
-                      {expanded ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
+                      {expanded ? (
+                        <ChevronDown className="size-4" />
+                      ) : (
+                        <ChevronRight className="size-4" />
+                      )}
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium">{new Date(session.sessionStartedAt).toLocaleDateString()}</span>
+                        <span className="font-medium">
+                          {new Date(session.sessionStartedAt).toLocaleDateString()}
+                        </span>
                         <span className="text-xs text-muted-foreground">
                           {new Date(session.sessionStartedAt).toLocaleTimeString([], {
                             hour: "2-digit",
@@ -67,7 +88,9 @@ export function SessionHistory({ drills }: { drills: DrillAnalysis[] }) {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Badge className="bg-emerald-600 text-white">{session.passCount} pass</Badge>
+                        <Badge className="bg-emerald-600 text-white">
+                          {session.passCount} pass
+                        </Badge>
                         <Badge variant="destructive">{session.failCount} fail</Badge>
                       </div>
                     </TableCell>
@@ -91,15 +114,25 @@ export function SessionHistory({ drills }: { drills: DrillAnalysis[] }) {
                                 key={entry.id}
                                 className={cn(
                                   "grid grid-cols-[minmax(0,1.5fr)_100px_80px_120px] gap-3 rounded-lg border px-3 py-2 text-sm",
-                                  entry.pass ? "border-emerald-200 bg-emerald-50/60" : "border-red-200 bg-red-50/60",
+                                  entry.pass
+                                    ? "border-emerald-200 bg-emerald-50/60"
+                                    : "border-red-200 bg-red-50/60",
                                 )}
                               >
                                 <div>
                                   <p className="font-medium">{entry.drillName}</p>
-                                  <p className="text-xs text-muted-foreground">Attempt #{entry.id}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    Attempt #{entry.id}
+                                  </p>
                                 </div>
                                 <span>{formatSeconds(entry.timeEntered)}</span>
-                                <Badge className={entry.pass ? "bg-emerald-600 text-white" : "bg-red-600 text-white"}>
+                                <Badge
+                                  className={
+                                    entry.pass
+                                      ? "bg-emerald-600 text-white"
+                                      : "bg-red-600 text-white"
+                                  }
+                                >
                                   {entry.pass ? "Pass" : "Fail"}
                                 </Badge>
                                 <span className="text-xs text-muted-foreground">

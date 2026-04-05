@@ -2,11 +2,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Layout from "@/components/layout";
 import { AuthProvider } from "@/context/auth-context";
+import AnalysisPage from "@/pages/analysis";
 import DrillsPage from "@/pages/drills";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 import ShootersPage from "@/pages/shooters";
-import AnalysisPage from "@/pages/analysis";
 import TrainPage from "@/pages/train";
 
 const queryClient = new QueryClient();

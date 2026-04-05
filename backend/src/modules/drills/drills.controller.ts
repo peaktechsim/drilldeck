@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Headers, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
 import { AdminGuard } from "../../guards/admin.guard";
+import type { DrillsService } from "./drills.service";
 import type { CreateDrillDto, UpdateDrillDto } from "./dto";
-import { DrillsService } from "./drills.service";
 
 @Controller("drills")
 export class DrillsController {

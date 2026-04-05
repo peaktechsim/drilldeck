@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import type { RegisterShooterDto, UpdateShooterDto, VerifyPinDto } from "./dto";
-import { ShootersService } from "./shooters.service";
+import type { ShootersService } from "./shooters.service";
 
 @Controller("shooters")
 export class ShootersController {
@@ -22,7 +22,11 @@ export class ShootersController {
     @Headers("x-shooter-id") requesterIdHeader?: string,
     @Headers("x-shooter-admin") isAdminHeader?: string,
   ) {
-    return this.shootersService.getById(id, this.parseRequesterId(requesterIdHeader), isAdminHeader === "true");
+    return this.shootersService.getById(
+      id,
+      this.parseRequesterId(requesterIdHeader),
+      isAdminHeader === "true",
+    );
   }
 
   @Patch(":id")
@@ -32,7 +36,12 @@ export class ShootersController {
     @Headers("x-shooter-id") requesterIdHeader?: string,
     @Headers("x-shooter-admin") isAdminHeader?: string,
   ) {
-    return this.shootersService.update(id, dto, this.parseRequesterId(requesterIdHeader), isAdminHeader === "true");
+    return this.shootersService.update(
+      id,
+      dto,
+      this.parseRequesterId(requesterIdHeader),
+      isAdminHeader === "true",
+    );
   }
 
   @Post("verify-pin")

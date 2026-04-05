@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { NotFoundException } from "@nestjs/common";
-import { drills, sessionDrills, sessionEntries, sessionShooters, trainingSessions } from "../../schema";
+import {
+  drills,
+  sessionDrills,
+  sessionEntries,
+  sessionShooters,
+  trainingSessions,
+} from "../../schema";
 import { SessionsService } from "./sessions.service";
 
 jest.mock("drizzle-orm", () => {
@@ -265,7 +271,10 @@ describe("SessionsService", () => {
       position: 2,
     });
 
-    expect(shootersService.verifyPin).toHaveBeenCalledWith({ email: "sam@example.com", pin: "4321" });
+    expect(shootersService.verifyPin).toHaveBeenCalledWith({
+      email: "sam@example.com",
+      pin: "4321",
+    });
     expect(joined.shooterId).toBe(22);
     expect(joined.position).toBe(2);
   });

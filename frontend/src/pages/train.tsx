@@ -32,12 +32,15 @@ export default function TrainPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Training mode</h1>
         <p className="text-sm text-muted-foreground">
-          Build a live session, run each shooter through the drill deck, and print the scorecard when the line is cold.
+          Build a live session, run each shooter through the drill deck, and print the scorecard
+          when the line is cold.
         </p>
       </div>
 
       {phase === "setup" ? <SessionSetup onBegin={handleBegin} /> : null}
-      {phase === "drilling" && sessionConfig ? <DrillFlow config={sessionConfig} onComplete={handleComplete} /> : null}
+      {phase === "drilling" && sessionConfig ? (
+        <DrillFlow config={sessionConfig} onComplete={handleComplete} />
+      ) : null}
       {phase === "scorecard" && sessionConfig && result ? (
         <Scorecard config={sessionConfig} result={result} onNewSession={handleReset} />
       ) : null}

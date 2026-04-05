@@ -1,8 +1,16 @@
-import { Clock3, Flame, Hash, Target, TrendingDown, TrendingUp, type LucideIcon } from "lucide-react";
-import type { DrillAnalysis } from "@/lib/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import {
+  Clock3,
+  Flame,
+  Hash,
+  type LucideIcon,
+  Target,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import { formatPercent, formatSeconds } from "@/components/analysis/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { DrillAnalysis } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 type StatDefinition = {
   key: string;
@@ -75,11 +83,15 @@ export function StatCards({ drill }: { drill: DrillAnalysis }) {
           return (
             <Card key={stat.key}>
               <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0 pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">{stat.label}</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {stat.label}
+                </CardTitle>
                 <Icon className="size-5 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <p className={cn("text-3xl font-semibold tracking-tight", valueClassName)}>{stat.render(drill)}</p>
+                <p className={cn("text-3xl font-semibold tracking-tight", valueClassName)}>
+                  {stat.render(drill)}
+                </p>
               </CardContent>
             </Card>
           );
