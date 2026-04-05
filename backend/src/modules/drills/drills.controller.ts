@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { AdminGuard } from "../../guards/admin.guard";
-import type { DrillsService } from "./drills.service";
+import { DrillsService } from "./drills.service";
 import type { CreateDrillDto, UpdateDrillDto } from "./dto";
 
 @Controller("drills")

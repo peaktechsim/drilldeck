@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import type { RegisterShooterDto, UpdateShooterDto, VerifyPinDto } from "./dto";
-import type { ShootersService } from "./shooters.service";
+import { ShootersService } from "./shooters.service";
 
 @Controller("shooters")
 export class ShootersController {

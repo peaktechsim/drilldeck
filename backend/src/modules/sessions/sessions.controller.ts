@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import type { AddShooterDto, CreateSessionDto, RecordEntryDto, SetDrillsDto } from "./dto";
-import type { SessionsService } from "./sessions.service";
+import { SessionsService } from "./sessions.service";
 
 @Controller("sessions")
 export class SessionsController {
