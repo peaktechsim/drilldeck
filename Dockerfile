@@ -19,7 +19,7 @@ RUN npm run build
 FROM node:22-alpine
 WORKDIR /app
 COPY backend/package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev && npm install drizzle-kit
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=frontend-build /app/public ./public
 COPY --from=backend-build /app/backend/src/schema ./src/schema
