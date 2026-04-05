@@ -19,11 +19,10 @@ RUN npm run build
 FROM node:22-alpine
 WORKDIR /app
 COPY backend/package*.json ./
-RUN npm ci --omit=dev && npm install drizzle-kit
+RUN npm ci --omit=dev
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=frontend-build /app/public ./public
-COPY --from=backend-build /app/backend/src/schema ./src/schema
-COPY --from=backend-build /app/backend/drizzle.config.ts ./
+COPY --from=backend-build /app/backend/migrate.cjs ./migrate.cjs
 ENV NODE_ENV=production PORT=3000
 EXPOSE 3000
-CMD ["sh", "-c", "echo y | npx drizzle-kit push --config drizzle.config.ts && node dist/src/main.js"]
+CMD ["sh", "-c", "node migrate.cjs && node dist/src/main.js"]
