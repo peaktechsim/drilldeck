@@ -22,8 +22,8 @@ COPY backend/package*.json ./
 RUN npm ci --omit=dev
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=frontend-build /app/public ./public
-COPY backend/drizzle ./drizzle
-COPY backend/drizzle.config.ts ./
+COPY --from=backend-build /app/backend/src/schema ./src/schema
+COPY --from=backend-build /app/backend/drizzle.config.ts ./
 ENV NODE_ENV=production PORT=3000
 EXPOSE 3000
 CMD ["sh", "-c", "npx drizzle-kit push && node dist/main.js"]
