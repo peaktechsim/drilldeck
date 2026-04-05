@@ -13,21 +13,8 @@ export function PistolIcon({ className, ...props }: WeaponIconProps) {
       {...props}
     >
       <path
-        d="M4 9.5H14.5L19.5 7.5V11L17.8 11.8V14.5C17.8 15.3 17.2 16 16.4 16H14.4L13.1 20H10.5L11.2 16H7.4C6 16 5 15 5 13.6V12H4V9.5Z"
+        d="M3 9H15.5L19.8 7.6C20.5 7.4 21 7.9 21 8.6V11.1C21 11.7 20.6 12.2 20 12.4L18.4 12.9V16C18.4 16.6 17.9 17 17.3 17H15.6L14.2 21H11.8L12.4 17H9.4L8.1 20.6H5.9L6.6 17H5.8C4.8 17 4 16.2 4 15.2V12.8H3V9ZM7.1 12.4V15H9.4L10.2 12.4H7.1Z"
         fill="currentColor"
-      />
-      <path
-        d="M14.3 9.5V7.4C14.3 6.9 14.7 6.5 15.2 6.5H17.4"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8.2 12.1H11.8"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
       />
     </svg>
   );
@@ -36,7 +23,7 @@ export function PistolIcon({ className, ...props }: WeaponIconProps) {
 export function RifleIcon({ className, ...props }: WeaponIconProps) {
   return (
     <svg
-      viewBox="0 0 32 24"
+      viewBox="0 0 40 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -44,28 +31,8 @@ export function RifleIcon({ className, ...props }: WeaponIconProps) {
       {...props}
     >
       <path
-        d="M2.5 11H9.5L12.2 8.8H18.4V7H21.2V8.8H25.2L29.5 10.2V11.8L25.2 13.2H23.2L21.5 15.5H18.7L19.6 13.2H15L11.1 16.8H8.2L10.6 13.2H2.5V11Z"
+        d="M1 11H6.8V8.9H9V7.8H10V8.9H14.3L18.2 6.2H24.7V4H27.2V6.2H30.8V7.3H32.9V10.1H37.2V11.2H39V12.8H37.2V13.9H32.6L31.2 16H28.2L29 13.9H26.4V18H23.8L22.3 22H19.5L20 18H17.2L15.8 13.9H11.8L10.1 17.7H8.1L8.6 13.9H1V11ZM24.3 8.4H21.9L18.9 10.6V11.8H24.3V8.4Z"
         fill="currentColor"
-      />
-      <path
-        d="M5 11V9.4H8.6"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M22.6 8.8V6.6H26.8V8.8"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M29.5 11.7H31"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
       />
     </svg>
   );
