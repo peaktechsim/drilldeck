@@ -26,4 +26,4 @@ COPY --from=backend-build /app/backend/src/schema ./src/schema
 COPY --from=backend-build /app/backend/drizzle.config.ts ./
 ENV NODE_ENV=production PORT=3000
 EXPOSE 3000
-CMD ["node", "dist/src/main.js"]
+CMD ["sh", "-c", "echo y | npx drizzle-kit push --config drizzle.config.ts && node dist/src/main.js"]
