@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Pencil } from "lucide-react";
 import { PistolIcon, RifleIcon } from "@/components/weapon-icons";
 import { Badge } from "@/components/ui/badge";
@@ -314,6 +314,9 @@ export default function DrillsPage() {
   const { shooter } = useAuth();
   const [createOpen, setCreateOpen] = useState(false);
   const [editingDrill, setEditingDrill] = useState<Drill | null>(null);
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+  const [overflowIds, setOverflowIds] = useState<Set<number>>(new Set());
+  const descriptionRefs = useRef(new Map<number, HTMLParagraphElement>());
 
   const drillsQuery = useQuery({
     queryKey: ["drills"],
@@ -335,6 +338,42 @@ export default function DrillsPage() {
       void queryClient.invalidateQueries({ queryKey: ["drills"] });
     },
   });
+
+  useEffect(() => {
+    function measureOverflow() {
+      const nextOverflowIds = new Set<number>();
+
+      for (const [id, element] of descriptionRefs.current.entries()) {
+        if (element.scrollHeight > element.clientHeight + 1) {
+          nextOverflowIds.add(id);
+        }
+      }
+
+      setOverflowIds(nextOverflowIds);
+    }
+
+    const frame = window.requestAnimationFrame(measureOverflow);
+    window.addEventListener("resize", measureOverflow);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", measureOverflow);
+    };
+  }, [drillsQuery.data]);
+
+  function toggleExpand(id: number) {
+    setExpandedIds((current) => {
+      const next = new Set(current);
+
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+
+      return next;
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -405,7 +444,32 @@ export default function DrillsPage() {
 
                 <div className="space-y-2 pr-8">
                   <h2 className="text-xl font-semibold tracking-tight text-foreground">{drill.name}</h2>
-                  <p className="line-clamp-2 text-sm text-muted-foreground">{drill.description}</p>
+                  <div>
+                    <p
+                      ref={(element) => {
+                        if (element) {
+                          descriptionRefs.current.set(drill.id, element);
+                        } else {
+                          descriptionRefs.current.delete(drill.id);
+                        }
+                      }}
+                      className={cn(
+                        "text-sm text-muted-foreground",
+                        !expandedIds.has(drill.id) && "line-clamp-2",
+                      )}
+                    >
+                      {drill.description}
+                    </p>
+                    {overflowIds.has(drill.id) ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleExpand(drill.id)}
+                        className="mt-1 text-sm font-medium text-primary hover:underline"
+                      >
+                        {expandedIds.has(drill.id) ? "less" : "more"}
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
