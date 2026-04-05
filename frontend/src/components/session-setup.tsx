@@ -354,7 +354,7 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
                       <p className="font-medium">{drill.name}</p>
                       <p className="text-sm text-muted-foreground">{drill.description}</p>
                       <p className="text-xs text-muted-foreground">
-                        Time standard: {drill.timeStandard}s
+                        {drill.distance} yards • Time standard: {drill.timeStandard}s
                       </p>
                     </div>
                   </div>

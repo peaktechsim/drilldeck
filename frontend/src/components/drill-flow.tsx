@@ -216,7 +216,7 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
             )}
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Standard {activeDrill.timeStandard}s • {entryLabel}
+            {activeDrill.distance} yards • Standard {activeDrill.timeStandard}s • {entryLabel}
           </p>
         </div>
       ) : (
@@ -272,7 +272,7 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
                   {activeShooter.name}
                 </h1>
                 <p className="text-sm text-muted-foreground sm:text-base">
-                  Drill {drillIndex + 1} of {drills.length} • Standard {activeDrill.timeStandard}s
+                  Drill {drillIndex + 1} of {drills.length} • {activeDrill.distance} yards • Standard {activeDrill.timeStandard}s
                 </p>
               </div>
 

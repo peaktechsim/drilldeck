@@ -110,7 +110,7 @@ export default function Scorecard({ config, result, onNewSession }: ScorecardPro
                         <div className="flex flex-col">
                           <span>{drill.name}</span>
                           <span className="text-xs font-normal text-muted-foreground">
-                            Std. {drill.timeStandard}s
+                            {drill.distance} yards • Std. {drill.timeStandard}s
                           </span>
                         </div>
                       </TableHead>

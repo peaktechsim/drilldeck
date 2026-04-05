@@ -75,6 +75,7 @@ class FakeInsertBuilder {
         name: String(values.name),
         description: String(values.description),
         timeStandard: String(values.timeStandard),
+        distance: String(values.distance ?? "7"),
         targetZones: (values.targetZones as string[]) ?? [],
         createdBy: (values.createdBy as number | null | undefined) ?? null,
         createdAt: new Date(),
@@ -161,6 +162,7 @@ describe("DrillsService", () => {
 
     expect(db.drills).toHaveLength(1);
     expect(drill.name).toBe("Bill Drill");
+    expect(drill.distance).toBe("7");
     expect(drill.targetZones).toEqual(["A", "C"]);
     expect(drill.createdBy).toBe(7);
   });

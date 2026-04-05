@@ -27,6 +27,7 @@ export default function DrillsPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [timeStandard, setTimeStandard] = useState("");
+  const [distance, setDistance] = useState("7");
   const [selectedZones, setSelectedZones] = useState<string[]>([]);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -52,6 +53,7 @@ export default function DrillsPage() {
     setName("");
     setDescription("");
     setTimeStandard("");
+    setDistance("7");
     setSelectedZones([]);
     setFormError(null);
   }
@@ -62,6 +64,7 @@ export default function DrillsPage() {
         name: name.trim(),
         description: description.trim(),
         timeStandard,
+        distance,
         targetZones: selectedZones,
       }),
     onSuccess: () => {
@@ -160,6 +163,22 @@ export default function DrillsPage() {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="drill-distance">Distance (yards)</Label>
+                  <Input
+                    id="drill-distance"
+                    type="number"
+                    min="0"
+                    step="1"
+                    inputMode="numeric"
+                    value={distance}
+                    onChange={(event) => setDistance(event.target.value)}
+                    placeholder="7"
+                    className="h-12 text-base"
+                    required
+                  />
+                </div>
+
                 <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
                   <div className="space-y-3">
                     <Label>Zone picker</Label>
@@ -235,6 +254,10 @@ export default function DrillsPage() {
                 <p className="text-sm text-muted-foreground">
                   <span className="font-medium text-foreground">Time standard:</span>{" "}
                   {drill.timeStandard}s
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">Distance:</span>{" "}
+                  {drill.distance} yards
                 </p>
                 <p className="text-sm text-muted-foreground">
                   <span className="font-medium text-foreground">Target zones:</span>{" "}

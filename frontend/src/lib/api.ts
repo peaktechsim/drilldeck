@@ -17,6 +17,7 @@ export type Drill = {
   name: string;
   description: string;
   timeStandard: string;
+  distance: string;
   targetZones: string[];
   createdBy: number | null;
   createdAt: string;
@@ -117,6 +118,7 @@ export type CreateDrillInput = {
   name: string;
   description: string;
   timeStandard: string;
+  distance: string;
   targetZones: string[];
 };
 

@@ -18,6 +18,7 @@ export class DrillsService {
         name: dto.name,
         description: dto.description,
         timeStandard: dto.timeStandard,
+        distance: dto.distance ?? "7",
         targetZones: dto.targetZones,
         createdBy: dto.createdBy ?? null,
       })
@@ -48,6 +49,7 @@ export class DrillsService {
     if (dto.name !== undefined) updates.name = dto.name;
     if (dto.description !== undefined) updates.description = dto.description;
     if (dto.timeStandard !== undefined) updates.timeStandard = dto.timeStandard;
+    if (dto.distance !== undefined) updates.distance = dto.distance;
     if (dto.targetZones !== undefined) updates.targetZones = dto.targetZones;
 
     const [updated] = await this.db

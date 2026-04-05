@@ -7,6 +7,7 @@ export const drills = pgTable("drills", {
   name: text("name").notNull(),
   description: text("description").notNull(),
   timeStandard: text("time_standard").notNull(),
+  distance: text("distance").notNull().default("7"),
   targetZones: text("target_zones").array().notNull().default(sql`'{}'::text[]`),
   createdBy: integer("created_by").references(() => shooters.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
