@@ -13,7 +13,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
 
   if (process.env.NODE_ENV === "production") {
-    app.useStaticAssets(join(__dirname, "..", "public"));
+    app.useStaticAssets(join(__dirname, "..", "..", "public"));
   }
 
   await app.listen(process.env.PORT || 3000);
