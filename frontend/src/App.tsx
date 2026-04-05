@@ -2,8 +2,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Layout from "@/components/layout";
 import { AuthProvider } from "@/context/auth-context";
+import DrillsPage from "@/pages/drills";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
+import ShootersPage from "@/pages/shooters";
 
 const queryClient = new QueryClient();
 
@@ -31,14 +33,8 @@ export function App() {
                 path="/train"
                 element={<PlaceholderPage title="Train" description="Session timer and entry flow coming next." />}
               />
-              <Route
-                path="/drills"
-                element={<PlaceholderPage title="Drills" description="Drill management UI will live here." />}
-              />
-              <Route
-                path="/shooters"
-                element={<PlaceholderPage title="Shooters" description="Shooter directory and admin tools coming soon." />}
-              />
+              <Route path="/drills" element={<DrillsPage />} />
+              <Route path="/shooters" element={<ShootersPage />} />
               <Route
                 path="/analysis"
                 element={<PlaceholderPage title="Analysis" description="Performance charts and drill insights will appear here." />}
