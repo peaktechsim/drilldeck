@@ -63,7 +63,10 @@ CREATE TABLE IF NOT EXISTS session_entries (
 `;
 
 async function migrate() {
-  const client = new Client(process.env.DATABASE_URL);
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  });
   await client.connect();
   console.log("Running migrations...");
   await client.query(SQL);
