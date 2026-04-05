@@ -243,26 +243,26 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
         </div>
       ) : (
         <div className="flex min-h-screen flex-col bg-gradient-to-b from-background to-muted/20 animate-in fade-in duration-300">
-          <div className="flex h-10 items-center justify-between gap-3 border-b border-border/50 px-4 sm:px-6">
-            <div className="flex min-w-0 items-center gap-2">
-              <p className="truncate text-sm font-medium">{activeDrill.name}</p>
-              <span className="flex items-center gap-1 text-muted-foreground">
+          <div className="flex min-h-14 items-center justify-between gap-3 border-b border-border/50 px-4 py-2 sm:px-6">
+            <div className="flex min-w-0 items-center gap-3">
+              <p className="truncate text-lg font-semibold sm:text-xl">{activeDrill.name}</p>
+              <span className="flex items-center gap-2 text-muted-foreground">
                 {activeWeapons.map(({ value, label, Icon }) => (
-                  <Icon key={value} className="h-5 w-5" aria-label={label} />
+                  <Icon key={value} className="h-8 w-8" aria-label={label} />
                 ))}
               </span>
             </div>
-            <Badge variant="outline" className="px-3 py-1 text-[11px] font-medium sm:text-xs">
+            <Badge variant="outline" className="rounded-full px-4 py-2 text-sm font-semibold sm:text-base">
               {entryLabel}
             </Badge>
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="h-8 px-2 text-sm text-muted-foreground"
+              className="h-10 px-3 text-base text-muted-foreground"
               onClick={onExit}
             >
-              <XIcon className="size-4" />
+              <XIcon className="size-5" />
               Exit
             </Button>
           </div>
@@ -270,7 +270,7 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
           <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
             <div
               className={cn(
-                "relative flex w-full max-w-2xl flex-col items-center gap-6 rounded-[2rem] border border-border/60 bg-card/95 px-6 py-8 text-center shadow-xl shadow-black/5 backdrop-blur sm:px-10 sm:py-10",
+                "relative grid w-full max-w-6xl gap-8 rounded-[2rem] border border-border/60 bg-card/95 p-6 shadow-xl shadow-black/5 backdrop-blur sm:p-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:items-stretch",
                 phase === "transitioning" && "opacity-90",
               )}
             >
@@ -293,85 +293,109 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
                 </div>
               ) : null}
 
-              <div className="space-y-2">
-                <Badge variant="outline" className="px-3 py-1 text-xs uppercase tracking-[0.22em]">
-                  Shooter on deck
-                </Badge>
-                <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                  {activeShooter.name}
-                </h1>
-                <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-muted-foreground sm:text-base">
-                  <span>
-                    Drill {drillIndex + 1} of {drills.length} • {activeDrill.distance} yards • Standard {activeDrill.timeStandard}s
-                  </span>
-                  <span className="flex items-center gap-1.5 text-muted-foreground">
-                    {activeWeapons.map(({ value, label, Icon }) => (
-                      <Icon key={value} className="h-5 w-5" aria-label={label} />
-                    ))}
-                  </span>
+              <div className="flex h-full flex-col justify-between gap-8 text-left">
+                <div className="space-y-4">
+                  <Badge variant="outline" className="rounded-full px-4 py-2 text-sm uppercase tracking-[0.22em] sm:text-base">
+                    Shooter on deck
+                  </Badge>
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+                    {activeShooter.name}
+                  </h1>
+                  <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                    {activeDrill.name}
+                  </h2>
+                  <p className="text-lg leading-relaxed text-muted-foreground sm:text-xl">
+                    {activeDrill.description}
+                  </p>
                 </div>
+
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                  <Badge
+                    variant="secondary"
+                    className="rounded-full px-4 py-2 text-2xl font-bold leading-none"
+                  >
+                    {activeDrill.timeStandard}s
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="rounded-full px-4 py-2 text-2xl font-bold leading-none"
+                  >
+                    {activeDrill.distance} yards
+                  </Badge>
+                  {activeDrill.targetZones.length ? (
+                    activeDrill.targetZones.map((zone) => (
+                      <Badge
+                        key={zone}
+                        variant="outline"
+                        className={cn("rounded-full px-4 py-2 text-lg font-semibold ring-1", zoneStyles[zone] ?? "")}
+                      >
+                        Zone <span className="ml-1 text-xl font-bold">{zone}</span>
+                      </Badge>
+                    ))
+                  ) : (
+                    <Badge variant="outline" className="rounded-full px-4 py-2 text-lg font-semibold text-muted-foreground">
+                      No target zones selected
+                    </Badge>
+                  )}
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    {activeWeapons.map(({ value, label, Icon }) => (
+                      <span
+                        key={value}
+                        className="inline-flex items-center justify-center rounded-full border px-4 py-2 text-foreground"
+                        aria-label={label}
+                        title={label}
+                      >
+                        <Icon className="h-8 w-8" aria-hidden="true" />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <form className="w-full space-y-5" onSubmit={handleSubmit}>
+                  <div className="space-y-3 text-left">
+                    <Label htmlFor="time-entered" className="text-xl font-medium text-foreground">
+                      Time entered (seconds)
+                    </Label>
+                    <Input
+                      id="time-entered"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      autoFocus
+                      inputMode="decimal"
+                      value={timeValue}
+                      onChange={(event) => setTimeValue(event.target.value)}
+                      className="h-20 text-center text-4xl font-semibold tracking-tight sm:text-5xl"
+                      placeholder="0.00"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  <div className="rounded-2xl border border-border/60 bg-muted/40 px-5 py-4 text-lg leading-relaxed text-muted-foreground">
+                    Pass requires {activeDrill.timeStandard}s or faster. {entryLabel}.
+                  </div>
+
+                  {error ? <p className="text-base text-destructive">{error}</p> : null}
+
+                  <Button type="submit" className="h-16 w-full text-xl" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <LoaderCircle className="size-6 animate-spin" />
+                        Saving…
+                      </>
+                    ) : (
+                      "Save time"
+                    )}
+                  </Button>
+                </form>
               </div>
 
-              <div className="w-full rounded-3xl border border-border/60 bg-background/80 px-6 py-5 shadow-sm">
+              <div className="flex h-full items-center justify-center rounded-3xl border border-border/60 bg-background/80 p-6 shadow-sm">
                 <UspsaTarget
                   selectedZones={activeDrill.targetZones}
-                  className="mx-auto flex max-w-sm justify-center"
+                  className="mx-auto flex h-full w-full max-w-md justify-center"
                 />
               </div>
-
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {activeDrill.targetZones.map((zone) => (
-                  <Badge
-                    key={zone}
-                    variant="outline"
-                    className={cn("px-3 py-1 text-sm ring-1", zoneStyles[zone] ?? "")}
-                  >
-                    Zone {zone}
-                  </Badge>
-                ))}
-              </div>
-
-              <form className="w-full space-y-4" onSubmit={handleSubmit}>
-                <div className="space-y-2 text-left">
-                  <Label htmlFor="time-entered" className="text-sm text-muted-foreground">
-                    Time entered (seconds)
-                  </Label>
-                  <Input
-                    id="time-entered"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    autoFocus
-                    inputMode="decimal"
-                    value={timeValue}
-                    onChange={(event) => setTimeValue(event.target.value)}
-                    className="h-16 text-center text-3xl font-semibold tracking-tight"
-                    placeholder="0.00"
-                    disabled={isSubmitting}
-                  />
-                </div>
-
-                <div className="rounded-2xl border border-border/60 bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-                  {activeDrill.description}
-                </div>
-
-                <div className="rounded-2xl bg-muted/50 px-4 py-3 text-sm text-muted-foreground">
-                  Pass requires {activeDrill.timeStandard}s or faster.
-                </div>
-
-                {error ? <p className="text-sm text-destructive">{error}</p> : null}
-
-                <Button type="submit" className="h-14 w-full text-lg" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <LoaderCircle className="size-5 animate-spin" />
-                      Saving…
-                    </>
-                  ) : (
-                    "Save time"
-                  )}
-                </Button>
-              </form>
             </div>
           </div>
         </div>

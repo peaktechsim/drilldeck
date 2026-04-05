@@ -308,26 +308,34 @@ export default function DrillsPage() {
         </p>
       ) : null}
 
-      <div className="grid gap-4">
+      <div className="grid gap-6">
         {drillsQuery.data?.map((drill) => {
           const drillWeapons = getDrillWeapons(drill);
 
           return (
-            <Card key={drill.id} className="py-4">
-              <CardContent className="grid gap-4 p-4 sm:px-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(220px,0.8fr)] lg:items-center">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <h2 className="text-lg font-semibold text-foreground">{drill.name}</h2>
-                    <p className="line-clamp-2 text-sm text-muted-foreground">
+            <Card key={drill.id} className="overflow-hidden py-0">
+              <CardContent className="grid min-h-[26rem] gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(260px,0.85fr)] lg:items-stretch">
+                <div className="flex h-full flex-col justify-between gap-8">
+                  <div className="space-y-4">
+                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                      {drill.name}
+                    </h2>
+                    <p className="text-lg leading-relaxed text-muted-foreground sm:text-xl">
                       {drill.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="h-6 rounded-full px-2.5 text-xs font-medium">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                    <Badge
+                      variant="secondary"
+                      className="rounded-full px-4 py-2 text-2xl font-bold leading-none"
+                    >
                       {drill.timeStandard}s
                     </Badge>
-                    <Badge variant="outline" className="h-6 rounded-full px-2.5 text-xs font-medium">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full px-4 py-2 text-xl font-semibold leading-none"
+                    >
                       {drill.distance} yards
                     </Badge>
                     {drill.targetZones.length ? (
@@ -336,38 +344,35 @@ export default function DrillsPage() {
                           key={zone}
                           variant="outline"
                           className={cn(
-                            "h-6 rounded-full px-2.5 text-xs font-medium",
+                            "rounded-full px-4 py-2 text-lg font-semibold",
                             zoneBadgeClasses[zone as keyof typeof zoneBadgeClasses],
                           )}
                         >
-                          Zone {zone}
+                          Zone <span className="ml-1 text-xl font-bold">{zone}</span>
                         </Badge>
                       ))
                     ) : (
-                      <Badge variant="outline" className="h-6 rounded-full px-2.5 text-xs font-medium">
+                      <Badge variant="outline" className="rounded-full px-4 py-2 text-lg font-semibold">
                         No zones
                       </Badge>
                     )}
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                    <span className="font-medium text-foreground">Weapons</span>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                       {drillWeapons.map(({ value, label, Icon }) => (
                         <span
                           key={value}
-                          className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1"
+                          className="inline-flex items-center justify-center rounded-full border px-4 py-2 text-foreground"
+                          aria-label={label}
+                          title={label}
                         >
-                          <Icon className="h-4 w-4" aria-hidden="true" />
-                          <span>{label}</span>
+                          <Icon className="h-8 w-8" aria-hidden="true" />
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-xl border bg-muted/10 p-4">
-                  <UspsaTarget selectedZones={drill.targetZones} className="flex justify-center" />
+                <div className="flex h-full items-center justify-center rounded-xl border bg-muted/10 p-4 sm:p-6">
+                  <UspsaTarget selectedZones={drill.targetZones} className="flex h-full w-full justify-center" />
                 </div>
               </CardContent>
             </Card>
