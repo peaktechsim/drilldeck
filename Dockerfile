@@ -23,7 +23,6 @@ COPY --from=backend-build /app/backend/node_modules ./node_modules
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=backend-build /app/backend/migrate.cjs ./migrate.cjs
 COPY --from=frontend-build /app/public ./public
-RUN npm prune --omit=dev
 ENV NODE_ENV=production PORT=3000
 EXPOSE 3000
 CMD ["sh", "-c", "node migrate.cjs && node dist/src/main.js"]
