@@ -33,3 +33,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  nav,
+  header,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+}
