@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Search, UserPlus, X } from "lucide-react";
+import { ArrowRight, Search, UserPlus, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/auth-context";
-import { api, type Drill, type ShooterSummary } from "@/lib/api";
+import { api, Drill, ShooterSummary } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 export type AuthedShooter = ShooterSummary & { pin: string };
@@ -27,6 +27,12 @@ type SessionSetupProps = {
 
 const MAX_PIN_ATTEMPTS = 5;
 
+function wait(delayMs: number) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, delayMs);
+  });
+}
+
 export default function SessionSetup({ onBegin }: SessionSetupProps) {
   const { shooter } = useAuth();
   const [search, setSearch] = useState("");
@@ -39,6 +45,7 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
   const [drillOrder, setDrillOrder] = useState<DrillOrder>("manual");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTransitioningOut, setIsTransitioningOut] = useState(false);
 
   const shootersQuery = useQuery({
     queryKey: ["shooters"],
@@ -146,6 +153,7 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
     }
 
     setIsSubmitting(true);
+    setIsTransitioningOut(true);
     setSubmitError(null);
 
     try {
@@ -163,6 +171,8 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
         drillIds: selectedDrills.map((entry) => entry.id),
       });
 
+      await wait(180);
+
       onBegin({
         sessionId: session.id,
         shooters: verifiedShooters,
@@ -171,13 +181,19 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
       });
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Unable to start session.");
+      setIsTransitioningOut(false);
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+    <div
+      className={cn(
+        "grid gap-6 transition-all duration-300 lg:grid-cols-[1.15fr_0.85fr]",
+        isTransitioningOut && "translate-y-2 opacity-0",
+      )}
+    >
       <Card>
         <CardHeader>
           <CardTitle>Session setup</CardTitle>
@@ -389,6 +405,7 @@ export default function SessionSetup({ onBegin }: SessionSetupProps) {
               onClick={() => void handleBegin()}
               disabled={isSubmitting}
             >
+              <ArrowRight className="size-4" />
               {isSubmitting ? "Starting session…" : "Begin training"}
             </Button>
           </CardContent>
