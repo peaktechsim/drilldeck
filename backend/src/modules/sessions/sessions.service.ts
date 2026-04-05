@@ -9,7 +9,7 @@ import {
   sessionShooters,
   trainingSessions,
 } from "../../schema";
-import type { ShootersService } from "../shooters/shooters.service";
+import { ShootersService } from "../shooters/shooters.service";
 import type { AddShooterDto, CreateSessionDto, RecordEntryDto, SetDrillsDto } from "./dto";
 
 type SessionRow = typeof trainingSessions.$inferSelect;
