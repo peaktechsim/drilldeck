@@ -17,6 +17,7 @@ RUN npm run build
 
 # Stage 3: Runtime
 FROM node:22-alpine
+RUN echo "cache-bust-v2"
 WORKDIR /app
 COPY --from=backend-build /app/backend/package.json ./package.json
 COPY --from=backend-build /app/backend/node_modules ./node_modules
