@@ -1,4 +1,4 @@
-const { Client } = require("pg");
+const postgres = require("postgres");
 
 const SQL = `
 CREATE TABLE IF NOT EXISTS shooters (
@@ -62,28 +62,15 @@ CREATE TABLE IF NOT EXISTS session_entries (
 );
 `;
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function migrate(retries = 5) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const client = new Client(process.env.DATABASE_URL);
-      await client.connect();
-      console.log("Running migrations...");
-      await client.query(SQL);
-      console.log("Migrations complete.");
-      await client.end();
-      return;
-    } catch (e) {
-      console.error(`Migration attempt ${i + 1} failed: ${e.message}`);
-      if (i < retries - 1) {
-        console.log("Retrying in 3s...");
-        await sleep(3000);
-      }
-    }
-  }
-  console.error("All migration attempts failed.");
-  process.exit(1);
+async function migrate() {
+  const sql = postgres(process.env.DATABASE_URL);
+  console.log("Running migrations...");
+  await sql.unsafe(SQL);
+  console.log("Migrations complete.");
+  await sql.end();
 }
 
-migrate();
+migrate().catch((e) => {
+  console.error("Migration failed:", e.message);
+  process.exit(1);
+});

@@ -19,7 +19,7 @@ RUN npm run build
 FROM node:22-alpine
 WORKDIR /app
 COPY backend/package*.json ./
-RUN npm ci --omit=dev && npm install pg
+RUN npm ci --omit=dev
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=backend-build /app/backend/migrate.cjs ./migrate.cjs
 COPY --from=frontend-build /app/public ./public
