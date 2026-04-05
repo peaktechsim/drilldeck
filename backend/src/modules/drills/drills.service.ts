@@ -20,6 +20,7 @@ export class DrillsService {
         timeStandard: dto.timeStandard,
         distance: dto.distance ?? "7",
         targetZones: dto.targetZones,
+        weapons: dto.weapons ?? ['pistol'],
         createdBy: dto.createdBy ?? null,
       })
       .returning();
@@ -51,6 +52,7 @@ export class DrillsService {
     if (dto.timeStandard !== undefined) updates.timeStandard = dto.timeStandard;
     if (dto.distance !== undefined) updates.distance = dto.distance;
     if (dto.targetZones !== undefined) updates.targetZones = dto.targetZones;
+    if (dto.weapons !== undefined) updates.weapons = dto.weapons.length ? dto.weapons : ['pistol'];
 
     const [updated] = await this.db
       .update(drills)

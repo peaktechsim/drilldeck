@@ -4,6 +4,7 @@ export interface CreateDrillDto {
   timeStandard: string;
   distance?: string;
   targetZones: string[];
+  weapons?: string[];
   createdBy?: number;
 }
 
@@ -13,4 +14,5 @@ export interface UpdateDrillDto {
   timeStandard?: string;
   distance?: string;
   targetZones?: string[];
+  weapons?: string[];
 }

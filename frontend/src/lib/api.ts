@@ -19,6 +19,7 @@ export type Drill = {
   timeStandard: string;
   distance: string;
   targetZones: string[];
+  weapons: string[];
   createdBy: number | null;
   createdAt: string;
 };
@@ -120,6 +121,7 @@ export type CreateDrillInput = {
   timeStandard: string;
   distance: string;
   targetZones: string[];
+  weapons: string[];
 };
 
 export type UpdateDrillInput = Partial<CreateDrillInput>;
@@ -222,6 +224,12 @@ export const api = {
   createDrill: (input: CreateDrillInput) =>
     request<Drill>("/api/drills", {
       method: "POST",
+      body: JSON.stringify(input),
+    }),
+
+  updateDrill: (id: number, input: UpdateDrillInput) =>
+    request<Drill>(`/api/drills/${id}`, {
+      method: "PATCH",
       body: JSON.stringify(input),
     }),
 

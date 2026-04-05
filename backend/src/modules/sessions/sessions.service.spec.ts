@@ -158,6 +158,7 @@ class FakeInsertBuilder {
           timeStandard: String(entry.timeStandard),
           distance: String(entry.distance ?? "7"),
           targetZones: (entry.targetZones as string[]) ?? [],
+          weapons: (entry.weapons as string[]) ?? ["pistol"],
           createdBy: (entry.createdBy as number | null | undefined) ?? null,
           createdAt: new Date(),
         };
@@ -300,6 +301,7 @@ describe("SessionsService", () => {
       timeStandard: "2.5",
       distance: "7",
       targetZones: ["A"],
+      weapons: ["pistol"],
       createdBy: 7,
       createdAt: new Date(),
     });
@@ -323,6 +325,7 @@ describe("SessionsService", () => {
       timeStandard: "2.5",
       distance: "7",
       targetZones: ["A"],
+      weapons: ["pistol"],
       createdBy: 7,
       createdAt: new Date(),
     });

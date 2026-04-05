@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent, useMemo, useState } from "react";
+import { PistolIcon, RifleIcon } from "@/components/weapon-icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,9 +17,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import UspsaTarget from "@/components/uspsa-target";
 import { useAuth } from "@/context/auth-context";
-import { api } from "@/lib/api";
+import { type Drill, api } from "@/lib/api";
 
 const zoneOrder = ["A", "B", "C", "D"] as const;
+const weaponOptions = [
+  { value: "pistol", label: "Pistol", Icon: PistolIcon },
+  { value: "rifle", label: "Rifle", Icon: RifleIcon },
+] as const;
+
+function getDrillWeapons(drill: Pick<Drill, "weapons">) {
+  const weapons = drill.weapons?.length ? drill.weapons : ["pistol"];
+  return weaponOptions.filter((option) => weapons.includes(option.value));
+}
 
 export default function DrillsPage() {
   const queryClient = useQueryClient();
@@ -29,6 +39,7 @@ export default function DrillsPage() {
   const [timeStandard, setTimeStandard] = useState("");
   const [distance, setDistance] = useState("7");
   const [selectedZones, setSelectedZones] = useState<string[]>([]);
+  const [selectedWeapons, setSelectedWeapons] = useState<string[]>(["pistol"]);
   const [formError, setFormError] = useState<string | null>(null);
 
   const drillsQuery = useQuery({
@@ -41,11 +52,27 @@ export default function DrillsPage() {
     [selectedZones],
   );
 
+  const selectedWeaponText = useMemo(
+    () =>
+      selectedWeapons.length
+        ? selectedWeapons.map((weapon) => weapon[0].toUpperCase() + weapon.slice(1)).join(", ")
+        : "Select at least one weapon.",
+    [selectedWeapons],
+  );
+
   function toggleZone(zone: string) {
     setSelectedZones((current) =>
       current.includes(zone)
         ? current.filter((entry) => entry !== zone)
         : [...current, zone].sort(),
+    );
+  }
+
+  function toggleWeapon(weapon: string) {
+    setSelectedWeapons((current) =>
+      current.includes(weapon)
+        ? current.filter((entry) => entry !== weapon)
+        : [...current, weapon].sort(),
     );
   }
 
@@ -55,6 +82,7 @@ export default function DrillsPage() {
     setTimeStandard("");
     setDistance("7");
     setSelectedZones([]);
+    setSelectedWeapons(["pistol"]);
     setFormError(null);
   }
 
@@ -66,6 +94,7 @@ export default function DrillsPage() {
         timeStandard,
         distance,
         targetZones: selectedZones,
+        weapons: selectedWeapons,
       }),
     onSuccess: () => {
       resetForm();
@@ -83,6 +112,11 @@ export default function DrillsPage() {
 
     if (!selectedZones.length) {
       setFormError("Select at least one target zone.");
+      return;
+    }
+
+    if (!selectedWeapons.length) {
+      setFormError("Select at least one weapon.");
       return;
     }
 
@@ -179,6 +213,31 @@ export default function DrillsPage() {
                   />
                 </div>
 
+                <div className="space-y-3">
+                  <Label>Weapons</Label>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {weaponOptions.map(({ value, label, Icon }) => {
+                      const checked = selectedWeapons.includes(value);
+
+                      return (
+                        <label
+                          key={value}
+                          className="flex cursor-pointer items-center gap-3 rounded-xl border bg-muted/10 px-4 py-3 text-sm font-medium transition-colors hover:border-primary/40 hover:bg-accent/40"
+                        >
+                          <Checkbox
+                            checked={checked}
+                            onCheckedChange={() => toggleWeapon(value)}
+                            aria-label={label}
+                          />
+                          <Icon className="h-5 w-5 text-muted-foreground" />
+                          <span>{label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  <p className="text-sm text-muted-foreground">{selectedWeaponText}</p>
+                </div>
+
                 <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
                   <div className="space-y-3">
                     <Label>Zone picker</Label>
@@ -243,34 +302,48 @@ export default function DrillsPage() {
       ) : null}
 
       <div className="grid gap-5">
-        {drillsQuery.data?.map((drill) => (
-          <Card key={drill.id}>
-            <CardHeader>
-              <CardTitle>{drill.name}</CardTitle>
-              <CardDescription>{drill.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">Time standard:</span>{" "}
-                  {drill.timeStandard}s
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">Distance:</span>{" "}
-                  {drill.distance} yards
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">Target zones:</span>{" "}
-                  {drill.targetZones.length ? drill.targetZones.join(", ") : "None"}
-                </p>
-              </div>
+        {drillsQuery.data?.map((drill) => {
+          const drillWeapons = getDrillWeapons(drill);
 
-              <div className="rounded-xl border bg-muted/10 p-4">
-                <UspsaTarget selectedZones={drill.targetZones} className="flex justify-center" />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+          return (
+            <Card key={drill.id}>
+              <CardHeader>
+                <CardTitle>{drill.name}</CardTitle>
+                <CardDescription>{drill.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    <span>
+                      <span className="font-medium text-foreground">Time standard:</span>{" "}
+                      {drill.timeStandard}s
+                    </span>
+                    <span>
+                      <span className="font-medium text-foreground">Distance:</span>{" "}
+                      {drill.distance} yards
+                    </span>
+                    <span>
+                      <span className="font-medium text-foreground">Target zones:</span>{" "}
+                      {drill.targetZones.length ? drill.targetZones.join(", ") : "None"}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="font-medium text-foreground">Weapons:</span>
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
+                        {drillWeapons.map(({ value, label, Icon }) => (
+                          <Icon key={value} className="h-5 w-5" aria-label={label} />
+                        ))}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border bg-muted/10 p-4">
+                  <UspsaTarget selectedZones={drill.targetZones} className="flex justify-center" />
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

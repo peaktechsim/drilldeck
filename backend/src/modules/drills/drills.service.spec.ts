@@ -77,6 +77,7 @@ class FakeInsertBuilder {
         timeStandard: String(values.timeStandard),
         distance: String(values.distance ?? "7"),
         targetZones: (values.targetZones as string[]) ?? [],
+        weapons: (values.weapons as string[]) ?? ["pistol"],
         createdBy: (values.createdBy as number | null | undefined) ?? null,
         createdAt: new Date(),
       };
@@ -164,6 +165,7 @@ describe("DrillsService", () => {
     expect(drill.name).toBe("Bill Drill");
     expect(drill.distance).toBe("7");
     expect(drill.targetZones).toEqual(["A", "C"]);
+    expect(drill.weapons).toEqual(["pistol"]);
     expect(drill.createdBy).toBe(7);
   });
 
@@ -207,18 +209,21 @@ describe("DrillsService", () => {
       description: "Reload practice",
       timeStandard: "4s",
       targetZones: ["A", "C"],
+      weapons: ["rifle"],
     });
 
     const updated = await service.update(created.id, {
       description: "Reload practice with movement",
       timeStandard: "4.5s",
       targetZones: ["A", "D"],
+      weapons: ["pistol", "rifle"],
     });
 
     expect(updated.name).toBe("One Reload One");
     expect(updated.description).toBe("Reload practice with movement");
     expect(updated.timeStandard).toBe("4.5s");
     expect(updated.targetZones).toEqual(["A", "D"]);
+    expect(updated.weapons).toEqual(["pistol", "rifle"]);
   });
 
   it("throws when the drill does not exist", async () => {

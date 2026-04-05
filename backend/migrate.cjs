@@ -26,12 +26,14 @@ CREATE TABLE IF NOT EXISTS drills (
   time_standard TEXT NOT NULL,
   distance TEXT NOT NULL DEFAULT '7',
   target_zones TEXT[] NOT NULL DEFAULT '{}'::text[],
+  weapons TEXT[] NOT NULL DEFAULT '{pistol}'::text[],
   created_by INTEGER REFERENCES shooters(id),
   created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 
 ALTER TABLE drills ADD COLUMN IF NOT EXISTS distance TEXT NOT NULL DEFAULT '7';
 UPDATE drills SET distance = '7' WHERE distance IS NULL;
+ALTER TABLE drills ADD COLUMN IF NOT EXISTS weapons TEXT[] NOT NULL DEFAULT '{pistol}'::text[];
 
 CREATE TABLE IF NOT EXISTS training_sessions (
   id SERIAL PRIMARY KEY,

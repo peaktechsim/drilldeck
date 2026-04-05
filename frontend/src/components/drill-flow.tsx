@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import UspsaTarget from "@/components/uspsa-target";
+import { PistolIcon, RifleIcon } from "@/components/weapon-icons";
 import { api, SessionEntry } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { SessionConfig } from "./session-setup";
@@ -38,6 +39,16 @@ const zoneStyles: Record<string, string> = {
   C: "bg-yellow-500/15 text-yellow-700 ring-yellow-500/30 dark:text-yellow-300",
   D: "bg-blue-500/15 text-blue-700 ring-blue-500/30 dark:text-blue-300",
 };
+
+const weaponOptions = [
+  { value: "pistol", label: "Pistol", Icon: PistolIcon },
+  { value: "rifle", label: "Rifle", Icon: RifleIcon },
+] as const;
+
+function getDrillWeapons(weapons: string[]) {
+  const normalizedWeapons = weapons.length ? weapons : ["pistol"];
+  return weaponOptions.filter((option) => normalizedWeapons.includes(option.value));
+}
 
 function shuffleItems<T>(items: T[]) {
   const copy = [...items];
@@ -92,6 +103,10 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
 
   const activeDrill = drills[drillIndex];
   const activeShooter = config.shooters[shooterIndex];
+  const activeWeapons = useMemo(
+    () => getDrillWeapons(activeDrill?.weapons ?? []),
+    [activeDrill?.weapons],
+  );
 
   useEffect(() => {
     if (phase !== "shooter-splash") {
@@ -195,9 +210,16 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
           <h1 className="mt-8 text-6xl font-bold tracking-tight sm:text-7xl">
             {activeShooter.name}
           </h1>
-          <p className="mt-5 text-lg text-muted-foreground sm:text-xl">
-            Drill {drillIndex + 1} of {drills.length}: {activeDrill.name}
-          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3 text-lg text-muted-foreground sm:text-xl">
+            <span>
+              Drill {drillIndex + 1} of {drills.length}: {activeDrill.name}
+            </span>
+            <span className="flex items-center gap-1.5 text-muted-foreground">
+              {activeWeapons.map(({ value, label, Icon }) => (
+                <Icon key={value} className="h-6 w-6" aria-label={label} />
+              ))}
+            </span>
+          </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
             {activeDrill.targetZones.length ? (
               activeDrill.targetZones.map((zone) => (
@@ -222,7 +244,14 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
       ) : (
         <div className="flex min-h-screen flex-col bg-gradient-to-b from-background to-muted/20 animate-in fade-in duration-300">
           <div className="flex h-10 items-center justify-between gap-3 border-b border-border/50 px-4 sm:px-6">
-            <p className="truncate text-sm font-medium">{activeDrill.name}</p>
+            <div className="flex min-w-0 items-center gap-2">
+              <p className="truncate text-sm font-medium">{activeDrill.name}</p>
+              <span className="flex items-center gap-1 text-muted-foreground">
+                {activeWeapons.map(({ value, label, Icon }) => (
+                  <Icon key={value} className="h-5 w-5" aria-label={label} />
+                ))}
+              </span>
+            </div>
             <Badge variant="outline" className="px-3 py-1 text-[11px] font-medium sm:text-xs">
               {entryLabel}
             </Badge>
@@ -271,9 +300,16 @@ export default function DrillFlow({ config, onComplete, onExit }: DrillFlowProps
                 <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
                   {activeShooter.name}
                 </h1>
-                <p className="text-sm text-muted-foreground sm:text-base">
-                  Drill {drillIndex + 1} of {drills.length} • {activeDrill.distance} yards • Standard {activeDrill.timeStandard}s
-                </p>
+                <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-muted-foreground sm:text-base">
+                  <span>
+                    Drill {drillIndex + 1} of {drills.length} • {activeDrill.distance} yards • Standard {activeDrill.timeStandard}s
+                  </span>
+                  <span className="flex items-center gap-1.5 text-muted-foreground">
+                    {activeWeapons.map(({ value, label, Icon }) => (
+                      <Icon key={value} className="h-5 w-5" aria-label={label} />
+                    ))}
+                  </span>
+                </div>
               </div>
 
               <div className="w-full rounded-3xl border border-border/60 bg-background/80 px-6 py-5 shadow-sm">
