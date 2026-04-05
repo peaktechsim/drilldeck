@@ -30,21 +30,44 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {!immersive ? (
-        <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
-          <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-            <div>
-              <p className="text-2xl font-semibold tracking-tight">DrillDeck</p>
-              <p className="text-sm text-muted-foreground">{shooter.name}</p>
+        <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur-sm">
+          <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                {shooter.name.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <p className="text-lg font-semibold tracking-tight text-foreground">DrillDeck</p>
+                <p className="truncate text-xs text-muted-foreground sm:hidden">{shooter.name}</p>
+              </div>
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              className="h-12 px-4 text-base"
-              onClick={handleLogout}
-            >
-              <LogOut className="size-5" />
-              Logout
-            </Button>
+
+            <nav className="hidden items-center gap-1 sm:flex">
+              {tabs.map(({ to, label }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) =>
+                    cn(
+                      "inline-flex h-14 items-center border-b-2 px-3 text-sm transition-colors",
+                      isActive
+                        ? "border-primary font-medium text-foreground"
+                        : "border-transparent text-muted-foreground hover:text-foreground",
+                    )
+                  }
+                >
+                  {label}
+                </NavLink>
+              ))}
+            </nav>
+
+            <div className="hidden items-center gap-3 sm:flex">
+              <span className="text-sm text-muted-foreground">{shooter.name}</span>
+              <Button type="button" variant="ghost" className="h-9 px-2.5" onClick={handleLogout}>
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
           </div>
         </header>
       ) : null}
@@ -52,33 +75,41 @@ export default function Layout() {
       <main
         className={cn(
           "flex flex-1 flex-col",
-          immersive ? "min-h-screen" : "mx-auto w-full max-w-5xl px-4 py-6 pb-28 sm:px-6",
+          immersive
+            ? "min-h-screen"
+            : "mx-auto w-full max-w-5xl px-4 py-6 pb-16 sm:px-6 sm:pb-6",
         )}
       >
         <Outlet />
       </main>
 
       {!immersive ? (
-        <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/98 backdrop-blur">
-          <div className="mx-auto grid max-w-5xl grid-cols-4 gap-2 px-3 py-3 sm:px-6">
+        <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 backdrop-blur-sm sm:hidden">
+          <div className="mx-auto grid h-12 max-w-5xl grid-cols-5 px-2">
             {tabs.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
                   cn(
-                    "flex min-h-16 flex-col items-center justify-center rounded-xl border text-sm font-medium transition-colors",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                    isActive
-                      ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                      : "border-transparent bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground",
+                    "flex flex-col items-center justify-center gap-0.5 text-[10px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
                   )
                 }
               >
-                <Icon className="mb-1 size-6" />
+                <Icon className="h-4 w-4" />
                 <span>{label}</span>
               </NavLink>
             ))}
+
+            <button
+              type="button"
+              className="flex flex-col items-center justify-center gap-0.5 text-[10px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </nav>
       ) : null}

@@ -68,7 +68,7 @@ export default function AnalysisPage() {
 
   return (
     <div className="space-y-6 pb-4">
-      <div className="space-y-2">
+      <div className="mb-6 space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Analysis</h1>
         <p className="text-sm text-muted-foreground">
           Track trends, compare drills, and inspect detailed session history.
@@ -88,7 +88,7 @@ export default function AnalysisPage() {
                 id="analysis-shooter"
                 value={selectedShooterId ?? ""}
                 onChange={(event) => setSelectedShooterId(Number(event.target.value))}
-                className="h-12 w-full rounded-md border bg-background px-3 text-base"
+                className="h-10 w-full rounded-md border bg-background px-3 text-sm"
               >
                 {(shootersQuery.data ?? []).map((entry) => (
                   <option key={entry.id} value={entry.id}>

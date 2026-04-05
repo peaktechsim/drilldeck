@@ -39,12 +39,11 @@ export default function TrainPage() {
 
   if (phase === "setup") {
     return (
-      <div className="flex flex-1 flex-col gap-6">
-        <div>
+      <div className="flex flex-1 flex-col space-y-6">
+        <div className="mb-6 space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">Training mode</h1>
           <p className="text-sm text-muted-foreground">
-            Build a live session, run each shooter through the drill deck, and print the scorecard
-            when the line is cold.
+            Build a live session, run shooters through the drill deck, and print the scorecard when the line is cold.
           </p>
         </div>
 

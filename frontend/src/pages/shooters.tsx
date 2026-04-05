@@ -150,6 +150,13 @@ export default function ShootersPage() {
 
   return (
     <div className="space-y-6">
+      <div className="mb-6 space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight">Shooters</h1>
+        <p className="text-sm text-muted-foreground">
+          Manage shooter profiles, equipment details, and roster information.
+        </p>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>{shooter.isAdmin ? "Shooter profile" : "Your shooter profile"}</CardTitle>
@@ -167,7 +174,7 @@ export default function ShootersPage() {
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   placeholder="Shooter name"
-                  className="h-12 text-base"
+                  className="h-10 text-sm"
                   required
                 />
               </div>
@@ -179,7 +186,7 @@ export default function ShootersPage() {
                   value={rifle}
                   onChange={(event) => setRifle(event.target.value)}
                   placeholder="Optional"
-                  className="h-12 text-base"
+                  className="h-10 text-sm"
                 />
               </div>
 
@@ -190,7 +197,7 @@ export default function ShootersPage() {
                   value={pistol}
                   onChange={(event) => setPistol(event.target.value)}
                   placeholder="Optional"
-                  className="h-12 text-base"
+                  className="h-10 text-sm"
                 />
               </div>
             </div>
@@ -207,7 +214,7 @@ export default function ShootersPage() {
 
             <Button
               type="submit"
-              className="h-12 text-base"
+              className="h-10 text-sm"
               disabled={updateMutation.isPending || shooterQuery.isLoading}
             >
               {updateMutation.isPending ? "Saving…" : "Save profile"}

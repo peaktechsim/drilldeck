@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent, useMemo, useState } from "react";
 import { PistolIcon, RifleIcon } from "@/components/weapon-icons";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
@@ -17,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import UspsaTarget from "@/components/uspsa-target";
 import { useAuth } from "@/context/auth-context";
+import { cn } from "@/lib/utils";
 import { type Drill, api } from "@/lib/api";
 
 const zoneOrder = ["A", "B", "C", "D"] as const;
@@ -24,6 +26,13 @@ const weaponOptions = [
   { value: "pistol", label: "Pistol", Icon: PistolIcon },
   { value: "rifle", label: "Rifle", Icon: RifleIcon },
 ] as const;
+
+const zoneBadgeClasses: Record<(typeof zoneOrder)[number], string> = {
+  A: "border-red-200 bg-red-500/10 text-red-700",
+  B: "border-orange-200 bg-orange-500/10 text-orange-700",
+  C: "border-yellow-200 bg-yellow-500/15 text-yellow-800",
+  D: "border-blue-200 bg-blue-500/10 text-blue-700",
+};
 
 function getDrillWeapons(drill: Pick<Drill, "weapons">) {
   const weapons = drill.weapons?.length ? drill.weapons : ["pistol"];
@@ -125,11 +134,11 @@ export default function DrillsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
-        <div>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">Drills</h1>
           <p className="text-sm text-muted-foreground">
-            Review available drills and their USPSA scoring zones.
+            Review available drills, time standards, and USPSA scoring emphasis.
           </p>
         </div>
 
@@ -144,7 +153,7 @@ export default function DrillsPage() {
             }}
           >
             <DialogTrigger asChild>
-              <Button type="button" className="h-12 px-5 text-base">
+              <Button type="button" className="h-10 px-4 text-sm">
                 Create Drill
               </Button>
             </DialogTrigger>
@@ -164,7 +173,7 @@ export default function DrillsPage() {
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder="Bill Drill"
-                    className="h-12 text-base"
+                    className="h-10 text-sm"
                     required
                   />
                 </div>
@@ -176,7 +185,7 @@ export default function DrillsPage() {
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     placeholder="Six rounds from the draw at seven yards"
-                    className="h-12 text-base"
+                    className="h-10 text-sm"
                     required
                   />
                 </div>
@@ -192,7 +201,7 @@ export default function DrillsPage() {
                     value={timeStandard}
                     onChange={(event) => setTimeStandard(event.target.value)}
                     placeholder="2.5"
-                    className="h-12 text-base"
+                    className="h-10 text-sm"
                     required
                   />
                 </div>
@@ -208,7 +217,7 @@ export default function DrillsPage() {
                     value={distance}
                     onChange={(event) => setDistance(event.target.value)}
                     placeholder="7"
-                    className="h-12 text-base"
+                    className="h-10 text-sm"
                     required
                   />
                 </div>
@@ -277,7 +286,7 @@ export default function DrillsPage() {
                 <DialogFooter>
                   <Button
                     type="submit"
-                    className="h-12 text-base"
+                    className="h-10 text-sm"
                     disabled={createMutation.isPending}
                   >
                     {createMutation.isPending ? "Creating…" : "Save drill"}
@@ -289,9 +298,7 @@ export default function DrillsPage() {
         ) : null}
       </div>
 
-      {drillsQuery.isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading drills…</p>
-      ) : null}
+      {drillsQuery.isLoading ? <p className="text-sm text-muted-foreground">Loading drills…</p> : null}
 
       {drillsQuery.error ? (
         <p className="text-sm text-destructive">
@@ -301,39 +308,61 @@ export default function DrillsPage() {
         </p>
       ) : null}
 
-      <div className="grid gap-5">
+      <div className="grid gap-4">
         {drillsQuery.data?.map((drill) => {
           const drillWeapons = getDrillWeapons(drill);
 
           return (
-            <Card key={drill.id}>
-              <CardHeader>
-                <CardTitle>{drill.name}</CardTitle>
-                <CardDescription>{drill.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
-                <div className="space-y-3">
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                    <span>
-                      <span className="font-medium text-foreground">Time standard:</span>{" "}
+            <Card key={drill.id} className="py-4">
+              <CardContent className="grid gap-4 p-4 sm:px-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(220px,0.8fr)] lg:items-center">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <h2 className="text-lg font-semibold text-foreground">{drill.name}</h2>
+                    <p className="line-clamp-2 text-sm text-muted-foreground">
+                      {drill.description}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary" className="h-6 rounded-full px-2.5 text-xs font-medium">
                       {drill.timeStandard}s
-                    </span>
-                    <span>
-                      <span className="font-medium text-foreground">Distance:</span>{" "}
+                    </Badge>
+                    <Badge variant="outline" className="h-6 rounded-full px-2.5 text-xs font-medium">
                       {drill.distance} yards
-                    </span>
-                    <span>
-                      <span className="font-medium text-foreground">Target zones:</span>{" "}
-                      {drill.targetZones.length ? drill.targetZones.join(", ") : "None"}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className="font-medium text-foreground">Weapons:</span>
-                      <span className="flex items-center gap-1.5 text-muted-foreground">
-                        {drillWeapons.map(({ value, label, Icon }) => (
-                          <Icon key={value} className="h-5 w-5" aria-label={label} />
-                        ))}
-                      </span>
-                    </span>
+                    </Badge>
+                    {drill.targetZones.length ? (
+                      drill.targetZones.map((zone) => (
+                        <Badge
+                          key={zone}
+                          variant="outline"
+                          className={cn(
+                            "h-6 rounded-full px-2.5 text-xs font-medium",
+                            zoneBadgeClasses[zone as keyof typeof zoneBadgeClasses],
+                          )}
+                        >
+                          Zone {zone}
+                        </Badge>
+                      ))
+                    ) : (
+                      <Badge variant="outline" className="h-6 rounded-full px-2.5 text-xs font-medium">
+                        No zones
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                    <span className="font-medium text-foreground">Weapons</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {drillWeapons.map(({ value, label, Icon }) => (
+                        <span
+                          key={value}
+                          className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1"
+                        >
+                          <Icon className="h-4 w-4" aria-hidden="true" />
+                          <span>{label}</span>
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
