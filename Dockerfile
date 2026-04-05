@@ -17,10 +17,9 @@ RUN npm run build
 
 # Stage 3: Runtime
 FROM node:22-alpine
-RUN echo "cache-bust-v2"
 WORKDIR /app
-COPY --from=backend-build /app/backend/package.json ./package.json
-COPY --from=backend-build /app/backend/node_modules ./node_modules
+COPY backend/package*.json ./
+RUN npm ci --omit=dev && npm install pg
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=backend-build /app/backend/migrate.cjs ./migrate.cjs
 COPY --from=frontend-build /app/public ./public
