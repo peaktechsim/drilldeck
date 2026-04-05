@@ -62,15 +62,33 @@ CREATE TABLE IF NOT EXISTS session_entries (
 );
 `;
 
-async function migrate() {
-  const sql = postgres(process.env.DATABASE_URL);
-  console.log("Running migrations...");
-  await sql.unsafe(SQL);
-  console.log("Migrations complete.");
-  await sql.end();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function migrate(retries = 5) {
+  for (let i = 0; i < retries; i++) {
+    let sql;
+    try {
+      sql = postgres(process.env.DATABASE_URL, {
+        connect_timeout: 10,
+        idle_timeout: 5,
+      });
+      console.log(`Migration attempt ${i + 1}...`);
+      await sql.unsafe(SQL);
+      console.log("Migrations complete.");
+      await sql.end();
+      return;
+    } catch (e) {
+      console.error(`Attempt ${i + 1} failed: ${e.message}`);
+      if (sql) await sql.end().catch(() => {});
+      if (i < retries - 1) {
+        console.log("Retrying in 3s...");
+        await sleep(3000);
+      }
+    }
+  }
+  console.error("All migration attempts failed, starting app anyway.");
 }
 
-migrate().catch((e) => {
-  console.error("Migration failed:", e.message);
-  process.exit(1);
-});
+migrate().then(() => {
+  // Migration done or exhausted retries — either way, don't block app start
+}).catch(() => {});
