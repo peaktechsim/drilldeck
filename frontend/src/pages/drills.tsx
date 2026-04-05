@@ -383,19 +383,19 @@ export default function DrillsPage() {
         </p>
       ) : null}
 
-      <div className="grid gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {drillsQuery.data?.map((drill) => {
           const drillWeapons = getDrillWeapons(drill);
 
           return (
             <Card key={drill.id} className="overflow-hidden py-0">
-              <CardContent className="relative grid min-h-[26rem] gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(260px,0.85fr)] lg:items-stretch">
+              <CardContent className="relative flex h-full flex-col gap-4 p-4">
                 {shooter?.isAdmin ? (
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-4 top-4 h-8 w-8 p-0 hover:bg-muted"
+                    className="absolute right-3 top-3 h-7 w-7 p-0 hover:bg-muted"
                     onClick={() => setEditingDrill(drill)}
                     aria-label={`Edit ${drill.name}`}
                   >
@@ -403,64 +403,53 @@ export default function DrillsPage() {
                   </Button>
                 ) : null}
 
-                <div className="flex h-full flex-col justify-between gap-8">
-                  <div className="space-y-4 pr-10">
-                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                      {drill.name}
-                    </h2>
-                    <p className="text-lg leading-relaxed text-muted-foreground sm:text-xl">
-                      {drill.description}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                    <Badge
-                      variant="secondary"
-                      className="rounded-full px-4 py-2 text-2xl font-bold leading-none"
-                    >
-                      {drill.timeStandard}s
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full px-4 py-2 text-xl font-semibold leading-none"
-                    >
-                      {drill.distance} yards
-                    </Badge>
-                    {drill.targetZones.length ? (
-                      drill.targetZones.map((zone) => (
-                        <Badge
-                          key={zone}
-                          variant="outline"
-                          className={cn(
-                            "rounded-full px-4 py-2 text-lg font-semibold",
-                            zoneBadgeClasses[zone as keyof typeof zoneBadgeClasses],
-                          )}
-                        >
-                          Zone <span className="ml-1 text-xl font-bold">{zone}</span>
-                        </Badge>
-                      ))
-                    ) : (
-                      <Badge variant="outline" className="rounded-full px-4 py-2 text-lg font-semibold">
-                        No zones
-                      </Badge>
-                    )}
-                    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                      {drillWeapons.map(({ value, label, Icon }) => (
-                        <span
-                          key={value}
-                          className="inline-flex items-center justify-center rounded-full border px-4 py-2 text-foreground"
-                          aria-label={label}
-                          title={label}
-                        >
-                          <Icon className="h-8 w-8" aria-hidden="true" />
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                <div className="space-y-2 pr-8">
+                  <h2 className="text-xl font-semibold tracking-tight text-foreground">{drill.name}</h2>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{drill.description}</p>
                 </div>
 
-                <div className="flex h-full items-center justify-center rounded-xl border bg-muted/10 p-4 sm:p-6">
-                  <UspsaTarget selectedZones={drill.targetZones} className="flex h-full w-full justify-center" />
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="secondary" className="rounded-full px-3 py-1 text-sm font-semibold">
+                    {drill.timeStandard}s
+                  </Badge>
+                  <Badge variant="outline" className="rounded-full px-3 py-1 text-sm font-semibold">
+                    {drill.distance} yd
+                  </Badge>
+                  {drill.targetZones.length ? (
+                    drill.targetZones.map((zone) => (
+                      <Badge
+                        key={zone}
+                        variant="outline"
+                        className={cn(
+                          "rounded-full px-3 py-1 text-sm font-semibold",
+                          zoneBadgeClasses[zone as keyof typeof zoneBadgeClasses],
+                        )}
+                      >
+                        Zone {zone}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Badge variant="outline" className="rounded-full px-3 py-1 text-sm font-semibold">
+                      No zones
+                    </Badge>
+                  )}
+                  {drillWeapons.map(({ value, label, Icon }) => (
+                    <span
+                      key={value}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border text-foreground"
+                      aria-label={label}
+                      title={label}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-center rounded-xl border bg-muted/10 p-3">
+                  <UspsaTarget
+                    selectedZones={drill.targetZones}
+                    className="flex h-20 w-20 justify-center"
+                  />
                 </div>
               </CardContent>
             </Card>
